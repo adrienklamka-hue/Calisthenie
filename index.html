@@ -640,14 +640,14 @@ function sayEx(){
 
 /* ================= MÉTRONOME TEMPO 2-1-2 ================= */
 let metH=null, metStep=0;
-function startMetro(){ stopMetro(); metStep=0;
-  metH=setInterval(()=>{ const s=metStep%5;
-    if(s===0) beep(330,.4); else if(s===2) beep(560,.1); else if(s===3) beep(880,.4);
-    metStep++; },1000); }
+function metroTick(){ const s=metStep%5;
+  if(s===0) beep(330,.5,.3); else if(s===2) beep(560,.12,.26); else if(s===3) beep(880,.5,.3);
+  metStep++; }
+function startMetro(){ stopMetro(); ensureAudio(); metStep=0; metroTick(); metH=setInterval(metroTick,1000); }
 function stopMetro(){ if(metH){ clearInterval(metH); metH=null; } }
 function toggleMetro(){
   if(metH){ stopMetro(); }
-  else { startMetro(); speak('Tempo deux, un, deux. Descends sur le grave, remonte sur l\'aigu.',true); }
+  else { startMetro(); speak('Grave : descends. Aigu : remonte.',true); }
   renderRun();
 }
 
@@ -1005,6 +1005,7 @@ function resetProg(){ if(confirm('Revenir au programme d\'origine de cet objecti
 /* ================= MODE SÉANCE ================= */
 function startRun(si){ startSession(state.prog.sessions[si]); }
 function startSession(s){
+  ensureAudio();
   run={s:s, idx:0, done:s.items.map(it=>Array(it.sets).fill(false)), hit:s.items.map(()=>false), start:Date.now(), rest:0};
   renderRun();
   speak((s.id==='J'?'Séance du jour':'Séance '+s.id)+', c\'est parti !',true); setTimeout(sayEx,1400);
@@ -1032,7 +1033,7 @@ function renderRun(){
     });
     h+='</div>'
      +'<button class="hitbtn '+(run.hit[run.idx]?'on':'')+'" onclick="tickHit()">'+(run.hit[run.idx]?'🎯 Haut de fourchette atteint — noté !':'🎯 Haut de fourchette atteint ? Tape ici si oui')+'</button>'
-     +'<button class="hitbtn '+(metH?'on':'')+'" style="margin-top:8px" onclick="toggleMetro()">'+(metH?'🎵 Métronome tempo 2-1-2 — actif (grave = descente, aigu = montée)':'🎵 Lancer le métronome tempo 2-1-2')+'</button>'
+     +'<button class="hitbtn '+(metH?'on':'')+'" style="margin-top:8px" onclick="toggleMetro()">'+(metH?'🎵 Métronome actif — grave = descente, aigu = montée. Pas de son ? Désactive le mode silencieux (bouton latéral).':'🎵 Lancer le métronome tempo 2-1-2')+'</button>'
      +'<a class="btn ghost wide" style="margin-top:10px" href="'+ytUrl(it.ex)+'" target="_blank" rel="noopener">▶ Voir la technique en vidéo</a>'
      +'<p class="muted" style="margin-top:8px;font-size:12.5px">Tempo 2-1-2, amplitude complète, repos '+rest+' s.'+(reg?' Trop dur aujourd\'hui ? Régresse sans ego : '+reg+'.':'')+'</p>';
   }
@@ -1100,13 +1101,25 @@ function setRPE(v){
 
 /* ================= HIRT : ÉCRAN, BUILDER, RUNNER ================= */
 let hrun=null, hTimer=null, wlock=null, actx=null, hb=null;
-function beep(freq,dur){
+function ensureAudio(){
   try{
     actx = actx || new (window.AudioContext||window.webkitAudioContext)();
-    const o=actx.createOscillator(), g=actx.createGain();
-    o.connect(g); g.connect(actx.destination);
-    o.frequency.value=freq; g.gain.setValueAtTime(.15,actx.currentTime);
-    o.start(); o.stop(actx.currentTime+dur);
+    if(actx.state!=='running') actx.resume();
+  }catch(e){}
+  return actx;
+}
+document.addEventListener('visibilitychange',()=>{ if(!document.hidden) ensureAudio(); });
+function beep(freq,dur,vol){
+  try{
+    const c=ensureAudio(); if(!c) return;
+    const o=c.createOscillator(), g=c.createGain();
+    o.type='sine'; o.connect(g); g.connect(c.destination);
+    o.frequency.value=freq;
+    const t=c.currentTime, v=vol||.22;
+    g.gain.setValueAtTime(.0001,t);
+    g.gain.exponentialRampToValueAtTime(v,t+.02);
+    g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+    o.start(t); o.stop(t+dur+.05);
   }catch(e){}
 }
 async function grabWake(){ try{ if('wakeLock' in navigator) wlock=await navigator.wakeLock.request('screen'); }catch(e){} }
@@ -1192,7 +1205,7 @@ function buildPhases(w){
   return P;
 }
 function startHirt(w){
-  w=scaleH(w);
+  ensureAudio(); w=scaleH(w);
   speak(w.name+'. C\'est parti !',true);
   hrun={w:w, ph:buildPhases(w), pi:0, left:0, paused:false, tours:0, start:Date.now(), total:0};
   hrun.total=hrun.ph.reduce((a,p)=>a+p.dur,0);
@@ -1202,6 +1215,7 @@ function startHirt(w){
   renderHRun();
 }
 function startWarm(){
+  ensureAudio();
   speak('Échauffement guidé. On commence en douceur.',true);
   const P=[{t:'prep',dur:5,ex:'jack',label:'Prépare-toi',sub:'Échauffement complet · 8 étapes'}];
   WARM.forEach((w,i)=>P.push({t:'work',dur:30,ex:w.ex,label:w.label,sub:'Étape '+(i+1)+' / '+WARM.length+' · en douceur, grande amplitude'}));
