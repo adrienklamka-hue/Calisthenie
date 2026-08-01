@@ -143,6 +143,35 @@ details.pcard summary .num{font-family:var(--disp);font-weight:800;color:var(--s
 details.pcard summary h3{font-size:14px}
 details.pcard .body{padding:0 14px 14px;font-size:14px}
 details.pcard .body p{margin-bottom:8px}
+/* UX v4 */
+.fx{animation:pop .28s ease both}
+@keyframes pop{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.btn:active,.mcard:active,.setbtn:active{transform:scale(.96)}
+.ringwrap{display:flex;justify-content:center;margin:4px 0}
+.hm{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:8px}
+.hm b{font-size:9px;color:var(--muted);text-align:center;font-weight:700}
+.hm i{aspect-ratio:1;border-radius:5px;background:var(--card2)}
+.hm i.on{background:var(--sun)}
+.hm i.hi{background:#FFF3A0}
+.hm i.fut{opacity:.22}
+.rpebtn{width:100%;text-align:left;background:var(--card);border:1.5px solid var(--line);border-radius:14px;
+  padding:13px 14px;margin-bottom:10px;color:var(--ink);cursor:pointer;font-family:var(--body);font-size:14.5px}
+.rpebtn .e{font-size:20px;margin-right:8px}
+a.btn{text-decoration:none;text-align:center}
+/* HIRT */
+.hchips{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
+.hchips span{background:var(--card2);border:1px solid var(--line);border-radius:7px;padding:2px 7px;font-size:11px}
+.hbig{font-family:var(--disp);font-weight:800;font-size:72px;text-align:center;line-height:1;margin:8px 0}
+.hphase{font-family:var(--disp);font-weight:800;text-transform:uppercase;letter-spacing:.14em;font-size:13px;text-align:center}
+.hwork{color:var(--sun)} .hrest{color:#7FC8F0} .hprep{color:var(--muted)}
+.hscreen{border-radius:18px;border:1.5px solid var(--line);padding:14px;margin-top:10px;background:var(--card)}
+.hscreen.work{border-color:var(--sun);background:#241F06}
+.hscreen.rest{border-color:#3A6C8A;background:#0E1D26}
+.hfield{margin-bottom:10px}
+.hfield label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);margin-bottom:4px}
+.hfield input{width:100%;background:var(--card2);border:1px solid var(--line);color:var(--ink);border-radius:10px;padding:9px;font-size:14px}
+.hnum{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.hexline{display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--line);font-size:13.5px}
 .toast{position:fixed;left:50%;transform:translateX(-50%);bottom:90px;background:var(--sun);color:#171500;
   font-family:var(--disp);font-weight:800;text-transform:uppercase;font-size:12px;letter-spacing:.05em;
   padding:10px 16px;border-radius:12px;z-index:200;display:none;max-width:86vw;text-align:center}
@@ -159,6 +188,7 @@ details.pcard .body p{margin-bottom:8px}
   <button data-tab="cours"><span class="ic">🎓</span>Cours</button>
   <button data-tab="moves"><span class="ic">💪</span>Mouvements</button>
   <button data-tab="prog" class="on"><span class="ic">📋</span>Programme</button>
+  <button data-tab="hirt"><span class="ic">⚡</span>HIRT</button>
   <button data-tab="suivi"><span class="ic">📈</span>Suivi</button>
 </nav>
 
@@ -340,7 +370,39 @@ climber(){ return mat()+shadow(102,60)
   + stroke('M102,86 L126,95 L112,104',9)
   + stroke('M104,86 L116,90',12,SHORT)
   + stroke('M143,80 L149,96 L147,111',7.5)
-  + head(160,72) + arrH(84,132,58); }
+  + head(160,72) + arrH(84,132,58); },
+burpee(){ return mat()+shadow(108,26)
+  + stroke('M108,41 L92,29 L84,16',7,FAR)
+  + stroke('M108,64 L118,83 L109,99',8,FAR)
+  + stroke('M110,39 C109,47 109,56 108,64',13)
+  + stroke('M108,64 L100,82 L110,98',9)
+  + stroke('M108,64 L104,74',12,SHORT)
+  + stroke('M110,41 L126,29 L134,16',7.5)
+  + head(110,25) + arrUp(164,36,70); },
+jack(){ return mat()+shadow(110,44)
+  + stroke('M110,43 L90,30 L74,20',7,FAR)
+  + stroke('M110,66 L94,88 L82,110',8,FAR)
+  + stroke('M110,41 L110,66',13)
+  + stroke('M110,66 L126,88 L138,110',9) + stroke('M138,110 L146,110',6)
+  + stroke('M110,66 L118,75',11,SHORT) + stroke('M110,66 L102,75',11,SHORT)
+  + stroke('M110,43 L130,30 L146,20',7.5)
+  + head(110,27) + arrH(52,80,50) + arrH(140,168,50); },
+knees(){ return mat()+shadow(104,36)
+  + stroke('M106,45 L92,56 L82,64',7,FAR)
+  + stroke('M105,70 L99,92 L102,112',8,FAR)
+  + stroke('M108,43 C107,52 106,61 105,70',13)
+  + stroke('M105,70 L126,62 L121,84',9)
+  + stroke('M105,70 L115,67',12,SHORT)
+  + stroke('M108,45 L124,56 L138,48',7.5)
+  + head(108,29) + arrUp(160,54,84); },
+jsquat(){ return mat()+shadow(105,42)
+  + stroke('M100,65 L120,68 L138,66',6.5,FAR)
+  + stroke('M90,89 L114,94 L110,113',8,FAR)
+  + stroke('M102,62 C99,71 95,80 92,88',13)
+  + stroke('M92,88 L116,92 L112,112',9) + stroke('M112,112 L126,112',6)
+  + stroke('M92,88 L104,90',12,SHORT)
+  + stroke('M102,64 L122,66 L140,63',7)
+  + head(101,50) + arrUp(64,44,90) + arrUp(160,44,90); }
 };
 let _fid=0;
 function figSVG(k, w){
@@ -410,7 +472,23 @@ negpull:{n:'Tractions négatives', ms:'Dos (grand dorsal) · biceps', cat:'Tirag
 climber:{n:'Mountain climbers', ms:'Cardio · abdos · épaules', cat:'Gainage',
  steps:['Position pompe haute, bras tendus, mains sous les épaules.','Ramène un genou vers la poitrine, repose, alterne rapidement.','Le dos reste plat, les hanches basses, comme une planche qui court.','Rythme régulier, respiration continue.'],
  err:['Fesses qui montent au fil des secondes.','Rebondir sur place sans amplitude.'],
- chain:['Rythme lent contrôlé','Mountain climbers','Version rapide','Croisés (genou-coude opposé)']}
+ chain:['Rythme lent contrôlé','Mountain climbers','Version rapide','Croisés (genou-coude opposé)']},
+burpee:{n:'Burpees', ms:'Full body · cardio intense', cat:'Cardio / full body',
+ steps:['Debout, descends en squat et pose les mains au sol.','Jette les pieds en arrière pour arriver en planche (pompe optionnelle).','Ramène les pieds sous toi d\'un bond, dos plat.','Saute vers le haut en tendant les bras au-dessus de la tête. Enchaîne.'],
+ err:['Dos qui s\'arrondit en posant les mains.','Hanches qui tombent en position planche.','Atterrir jambes tendues (amortis toujours genoux fléchis).'],
+ chain:['Burpees sans saut (step-back)','Burpees','Burpees avec pompe','Burpees over jump']},
+jack:{n:'Jumping jacks', ms:'Cardio · coordination', cat:'Cardio / full body',
+ steps:['Debout, pieds joints, bras le long du corps.','Saute en écartant les jambes et en montant les bras au-dessus de la tête.','Re-saute pour revenir pieds joints, bras le long du corps.','Rythme régulier, réception souple sur l\'avant du pied.'],
+ err:['Réception talons, jambes raides.','Bras qui ne montent qu\'à moitié.'],
+ chain:['Version marchée (sans saut)','Jumping jacks','Version rapide','Seal jacks / cross jacks']},
+knees:{n:'Montées de genoux', ms:'Cardio · fléchisseurs de hanche', cat:'Cardio / full body',
+ steps:['Cours sur place en montant les genoux à hauteur de hanche.','Buste droit, gainé, regard devant.','Les bras accompagnent en rythme de course.','Contact au sol bref, sur l\'avant du pied.'],
+ err:['Se pencher en arrière.','Genoux qui ne montent pas assez haut.','Talons qui claquent au sol.'],
+ chain:['Marche genoux hauts','Montées de genoux','Version sprint','Avec pause gainage entre blocs']},
+jsquat:{n:'Squats sautés', ms:'Quadriceps · fessiers · explosivité', cat:'Cardio / full body',
+ steps:['Descends en squat complet, cuisses parallèles.','Explose vers le haut en poussant fort dans les talons.','Saute, corps tendu, bras vers l\'arrière puis l\'avant pour l\'élan.','Amortis la réception genoux fléchis et enchaîne directement le squat suivant.'],
+ err:['Réception jambes tendues (dur pour les genoux).','Demi-amplitude en bas.','Genoux qui rentrent à la réception.'],
+ chain:['Squats','Squats sautés','Jump squats 180°','Box jumps']}
 };
 
 /* ================= OBJECTIFS & PROGRAMMES ================= */
@@ -451,6 +529,78 @@ sante:{name:'Programme Mobilité & Santé', sessions:[
   {ex:'planche',sets:3,reps:'20-30s'},{ex:'side',sets:3,reps:'15-20s/c'},{ex:'hollow',sets:3,reps:'15-20s'},{ex:'bridge',sets:3,reps:'12'}]}]}
 };
 
+/* ================= HIRT ================= */
+const HPRESETS = [
+ {name:'Full Body 40/20', fmt:'circuit', work:40, rest:20, rounds:4,
+  exs:['jsquat','pompe','climber','fente','row','planche'],
+  note:'Le classique HIRT : 6 exercices enchaînés 40 s d\'effort / 20 s de repos, 4 tours.'},
+ {name:'EMOM 20 minutes', fmt:'emom', minutes:20,
+  exs:[{ex:'squat',reps:'12'},{ex:'pompe',reps:'8'},{ex:'fente',reps:'5/jambe'},{ex:'burpee',reps:'6'}],
+  note:'Chaque minute : fais les répétitions demandées, le temps restant = ton repos.'},
+ {name:'AMRAP 15 minutes', fmt:'amrap', minutes:15,
+  exs:[{ex:'squat',reps:'10'},{ex:'pompe',reps:'8'},{ex:'row',reps:'8'},{ex:'climber',reps:'20'}],
+  note:'Maximum de tours en 15 minutes. Compte-les avec le bouton +1.'},
+ {name:'Tabata Finisher', fmt:'tabata', work:20, rest:10, rounds:8,
+  exs:['burpee','knees'],
+  note:'8 intervalles de 20/10 en alternant les 2 exercices — 4 minutes qui piquent, en fin de séance.'}
+];
+function exKey(x){ return typeof x==='string' ? x : x.ex; }
+function exName(x){ const e=EX[exKey(x)]; return e ? e.n : '?'; }
+function hFmtLabel(f){ return {circuit:'Circuit',emom:'EMOM',amrap:'AMRAP',tabata:'Tabata'}[f]||f; }
+function hDur(w){
+  if(w.fmt==='circuit') return Math.ceil(w.rounds*w.exs.length*(w.work+w.rest)/60);
+  if(w.fmt==='tabata') return Math.ceil(w.rounds*(w.work+w.rest)/60);
+  return w.minutes;
+}
+
+/* ================= COULEURS PAR FAMILLE ================= */
+const CATCOL={'Poussée horizontale':'#F2B705','Poussée verticale':'#F28705','Poussée':'#F2B705',
+ 'Squat':'#8FD14F','Hanche (hinge)':'#8FD14F','Gainage':'#B48CF2','Chaîne postérieure':'#5FA8F5',
+ 'Tirage horizontal':'#5FA8F5','Tirage vertical':'#5FA8F5','Cardio / full body':'#F2685C'};
+function catColor(c){ return CATCOL[c]||'#9DB295'; }
+
+/* ================= DIFFICULTÉ ================= */
+const DIFF={
+ easy:{t:'Découverte', ic:'🌱', rm:.75, restm:1.35, hw:-10, hr:5, d:'Reps réduites de 25 %, repos rallongés, efforts HIRT raccourcis. Pour reprendre ou apprendre.'},
+ normal:{t:'Normal', ic:'⚙️', rm:1, restm:1, hw:0, hr:0, d:'Le programme tel qu\'il est écrit — calibré pour ton niveau actuel.'},
+ hard:{t:'Intense', ic:'🔥', rm:1.25, restm:.7, hw:5, hr:-5, d:'Reps augmentées de 25 %, repos raccourcis, efforts HIRT rallongés. Quand Normal ne pique plus.'}
+};
+function scaleReps(r){ const m=DIFF[state.diff].rm; if(m===1) return r;
+  return String(r).replace(/\d+/g, n=>Math.max(1,Math.round(parseInt(n)*m))); }
+function restSecs(){ return Math.max(30, Math.round(OBJ[state.objective].rest*DIFF[state.diff].restm/5)*5); }
+function scaleH(w){ const D=DIFF[state.diff]; if(!D.hw&&!D.hr) return w;
+  const c=JSON.parse(JSON.stringify(w));
+  if(c.work) c.work=Math.max(15,c.work+D.hw);
+  if(typeof c.rest==='number') c.rest=Math.max(0,c.rest+D.hr);
+  return c; }
+
+/* ================= VIDÉO ================= */
+function ytUrl(k){ return 'https://www.youtube.com/results?search_query='+encodeURIComponent(EX[k].n+' technique tutoriel'); }
+
+/* ================= ANNEAU CHRONO ================= */
+function ring(sec,total,color,size){
+  const r=52, c=2*Math.PI*r, off=c*(1-Math.max(0,Math.min(1,sec/Math.max(1,total))));
+  const txt = sec>=60 ? Math.floor(sec/60)+':'+String(sec%60).padStart(2,'0') : sec;
+  return '<div class="ringwrap"><svg viewBox="0 0 120 120" width="'+size+'">'
+   +'<circle cx="60" cy="60" r="'+r+'" fill="none" stroke="#2E4230" stroke-width="8"/>'
+   +'<circle cx="60" cy="60" r="'+r+'" fill="none" stroke="'+color+'" stroke-width="8" stroke-linecap="round"'
+   +' stroke-dasharray="'+c.toFixed(1)+'" stroke-dashoffset="'+off.toFixed(1)+'" transform="rotate(-90 60 60)"/>'
+   +'<text x="60" y="62" text-anchor="middle" dominant-baseline="middle" font-size="32" font-weight="800" fill="'+color+'"'
+   +' font-family="Futura,Trebuchet MS,sans-serif">'+txt+'</text></svg></div>';
+}
+function vib(ms){ try{ if(navigator.vibrate) navigator.vibrate(ms); }catch(e){} }
+
+/* ================= ÉCHAUFFEMENT GUIDÉ ================= */
+const WARM=[
+ {ex:'jack',label:'Jumping jacks légers'},
+ {ex:'knees',label:'Montées de genoux douces'},
+ {ex:'jack',label:'Cercles de bras & épaules'},
+ {ex:'pompe_inc',label:'Cercles de poignets'},
+ {ex:'squat',label:'Rotations de hanches'},
+ {ex:'squat',label:'Squats lents, grande amplitude'},
+ {ex:'fente',label:'Fentes dynamiques'},
+ {ex:'pompe_inc',label:'Pompes inclinées faciles'}];
+
 /* ================= COURS ================= */
 const COURSE = [
  {t:'La surcharge progressive', b:'<p>C\'est LE principe n°1. Ton corps s\'adapte à ce qu\'on lui demande : pour progresser, chaque semaine doit être légèrement plus exigeante que la précédente. En callisthénie, on joue sur : plus de répétitions, une variante plus difficile, un tempo plus lent, ou moins de repos.</p><p><b>Ta règle :</b> quand tu atteins le haut de la fourchette sur TOUTES les séries, tu passes au niveau supérieur. L\'appli te le proposera automatiquement dans l\'onglet Programme.</p>'},
@@ -459,12 +609,13 @@ const COURSE = [
  {t:'Tension et tempo', b:'<p>Le muscle grossit sous <b>tension</b>. Tempo de référence : <b>2-1-2</b> — 2 s de descente, 1 s de pause, 2 s de montée. Ce tempo rend une pompe "facile" beaucoup plus productive.</p>'},
  {t:'La récupération construit le muscle', b:'<p>La séance envoie le signal ; le muscle se construit pendant le repos : 48 h entre séances, 7 h de sommeil minimum, ~1,6 à 2 g de protéines par kilo et par jour.</p><p>Tes séances de course et de HIRT s\'intercalent les autres jours — évite juste une grosse séance jambes la veille d\'une sortie longue.</p>'},
  {t:'La constance bat l\'intensité', b:'<p>3 séances de 30 minutes tenues toute l\'année écrasent 6 séances tenues 3 semaines. Planifie tes créneaux comme des rendez-vous. Séance ratée ? Elle saute, on ne double pas. Journée sans énergie ? Fais la moitié : la pire séance est celle qu\'on ne fait pas.</p>'},
- {t:'Échauffement et mobilité', b:'<p>5 minutes avant chaque séance : 1 min de cardio léger, cercles de bras / épaules / poignets, puis 10 squats lents et 10 pompes inclinées pour répéter les patterns. Poignets et épaules sont les zones sensibles du débutant : échauffe-les à chaque fois.</p>'}
+ {t:'Échauffement et mobilité', b:'<p>5 minutes avant chaque séance : 1 min de cardio léger, cercles de bras / épaules / poignets, puis 10 squats lents et 10 pompes inclinées pour répéter les patterns. Poignets et épaules sont les zones sensibles du débutant : échauffe-les à chaque fois. L\'appli embarque un échauffement guidé chronométré (bouton 🔥 dans Programme et HIRT).</p>'},
+ {t:'Décharge et retour au calme', b:'<p>Toutes les 6 à 8 semaines, offre-toi une <b>semaine de décharge</b> : mêmes séances, mais moitié moins de séries (ou difficulté 🌱 Découverte). Les articulations et le système nerveux récupèrent, et tu repars plus fort — c\'est ce que font tous les athlètes sérieux.</p><p>Après chaque séance, 2-3 minutes de <b>retour au calme</b> : marche tranquille, respiration nasale lente, puis étirements doux des muscles travaillés (20-30 s par position, sans forcer). Ton ressenti de fin de séance (🥱💪😮‍💨) aide l\'appli à te conseiller.</p>'}
 ];
 
 /* ================= ÉTAT & STOCKAGE ================= */
 let state = null; let mem=false;
-function fresh(){ return {objective:'physique', prog:JSON.parse(JSON.stringify(PROGS.physique)), history:[], exlog:{}}; }
+function fresh(){ return {objective:'physique', prog:JSON.parse(JSON.stringify(PROGS.physique)), history:[], exlog:{}, hirt:[], diff:'normal'}; }
 async function load(){
   try{
     const raw = localStorage.getItem('calis:v2');
@@ -472,6 +623,8 @@ async function load(){
   }catch(e){}
   if(!state) state=fresh();
   if(!state.exlog) state.exlog={};
+  if(!state.hirt) state.hirt=[];
+  if(!state.diff) state.diff='normal';
   render();
 }
 async function save(){
@@ -534,8 +687,9 @@ function applyBump(k){
 function dismissSugg(k){ state.exlog[k]=0; save(); renderProg(); }
 function nextSession(){
   const order=state.prog.sessions.map(s=>s.id);
-  if(!state.history.length) return order[0];
-  const last=state.history[0].sess, i=order.indexOf(last);
+  const lastE=state.history.find(x=>x.sess);
+  if(!lastE) return order[0];
+  const i=order.indexOf(lastE.sess);
   return order[(i+1)%order.length] || order[0];
 }
 
@@ -543,16 +697,19 @@ function nextSession(){
 let tab='prog', editing=false, run=null, timerH=null;
 document.querySelectorAll('.tabbar button').forEach(b=>b.addEventListener('click',()=>{
   tab=b.dataset.tab; run=null; editing=false; clearInterval(timerH);
+  hrun=null; clearInterval(hTimer); releaseWake();
   document.querySelectorAll('.tabbar button').forEach(x=>x.classList.toggle('on',x===b));
   render();
 }));
 const M=document.getElementById('main');
 function render(){
-  document.getElementById('hsub').textContent='Programme d\'Adrien · '+OBJ[state.objective].t;
+  document.getElementById('hsub').textContent='Adrien · '+OBJ[state.objective].t+' · '+DIFF[state.diff].ic+' '+DIFF[state.diff].t;
+  if(hrun) return renderHRun();
   if(run) return renderRun();
   if(tab==='cours') renderCours();
   else if(tab==='moves') renderMoves();
   else if(tab==='prog') renderProg();
+  else if(tab==='hirt') renderHirt();
   else renderSuivi();
   window.scrollTo(0,0);
 }
@@ -561,11 +718,12 @@ function render(){
 function renderCours(){
   let h = '<div class="hero"><div class="eyebrow" style="color:#BFE39A">Cours introductif</div>'
     + '<h2>La callisthénie,<br>c\'est <span class="accent">ton corps</span><br>comme seule machine</h2>'
-    + '<p>Force, muscle et contrôle avec le poids du corps. 7 principes à connaître — tape sur chaque carte.</p></div>';
+    + '<p>Force, muscle et contrôle avec le poids du corps. 8 principes à connaître — tape sur chaque carte.</p>'
+    + '<div style="margin-top:12px;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.18)">'+figSVG('pompe',600)+'</div></div>';
   COURSE.forEach((c,i)=>{
     h += '<details class="pcard"><summary><span class="num">'+String(i+1).padStart(2,'0')+'</span><h3>'+c.t+'</h3></summary><div class="body">'+c.b+'</div></details>';
   });
-  M.innerHTML=h;
+  M.innerHTML='<div class="fx">'+h+'</div>';
 }
 
 /* ================= MOUVEMENTS ================= */
@@ -574,28 +732,32 @@ function renderMoves(){
   const cats = {};
   Object.keys(EX).forEach(k=>{ const c=EX[k].cat; (cats[c]=cats[c]||[]).push(k); });
   Object.keys(cats).forEach(c=>{
-    h += '<div class="eyebrow" style="margin:14px 2px 8px">'+c+'</div><div class="mgrid">';
+    h += '<div class="eyebrow" style="margin:14px 2px 8px"><span style="color:'+catColor(c)+'">●</span> '+c+'</div><div class="mgrid">';
     cats[c].forEach(k=>{
       h += '<div class="mcard" onclick="openEx(\''+k+'\')"><span class="ill">'+figSVG(k)+'</span>'
         +'<div class="cap"><div class="nm">'+EX[k].n+'</div><div class="ms">'+EX[k].ms+'</div></div></div>';
     });
     h += '</div>';
   });
-  M.innerHTML=h;
+  M.innerHTML='<div class="fx">'+h+'</div>';
 }
 function openEx(k){
   const e=EX[k];
   let h = '<div class="handle"></div>'+figSVG(k,600).replace('<svg','<svg style="border-radius:14px;display:block;width:100%;margin-bottom:12px"')
-   + '<div class="eyebrow">'+e.cat+'</div><h2>'+e.n+'</h2><div class="muted">'+e.ms+'</div>'
+   + '<div class="eyebrow" style="color:'+catColor(e.cat)+'">● '+e.cat+'</div><h2>'+e.n+'</h2><div class="muted">'+e.ms+'</div>'
    + '<div class="sec"><div class="eyebrow">Exécution</div><ol class="steps">'+e.steps.map(s=>'<li>'+s+'</li>').join('')+'</ol></div>'
    + '<div class="sec"><div class="eyebrow">Erreurs fréquentes</div><ul class="dots">'+e.err.map(s=>'<li>'+s+'</li>').join('')+'</ul></div>'
    + '<div class="sec"><div class="eyebrow">Chaîne de progression</div><div class="chain">'
    + e.chain.map(c=>'<span class="'+(c===e.n?'now':'')+'">'+c+'</span>').join('<span style="border:none;background:none;color:#5D8F46">→</span>')+'</div></div>'
-   + '<div style="margin-top:16px"><button class="btn dim wide" onclick="closeModal()">Fermer</button></div>';
+   + '<a class="btn ghost wide" style="margin-top:16px" href="'+ytUrl(k)+'" target="_blank" rel="noopener">▶ Voir la technique en vidéo (YouTube)</a>'
+   + '<div style="margin-top:10px"><button class="btn dim wide" onclick="closeModal()">Fermer</button></div>';
   document.getElementById('sheet').innerHTML=h;
   document.getElementById('modal').classList.add('on');
 }
-function closeModal(){ document.getElementById('modal').classList.remove('on'); }
+function closeModal(){
+  if(typeof pending!=='undefined' && pending){ state.history.unshift(pending); pending=null; save(); }
+  document.getElementById('modal').classList.remove('on');
+}
 document.getElementById('modal').addEventListener('click',e=>{ if(e.target.id==='modal') closeModal(); });
 
 /* ================= OBJECTIF ================= */
@@ -618,15 +780,28 @@ function setObj(k){
   save(); closeModal(); render();
   toast('Objectif : '+OBJ[k].t+' ✔');
 }
+function openDiff(){
+  let h='<div class="handle"></div><h2>Difficulté</h2><p class="muted" style="margin-bottom:12px">S\'applique partout, sans toucher au programme de base : répétitions, durées de gainage, temps de repos et intervalles HIRT.</p>';
+  Object.keys(DIFF).forEach(k=>{
+    h+='<button class="objopt '+(k===state.diff?'on':'')+'" onclick="setDiff(\''+k+'\')">'
+      +'<div class="t">'+DIFF[k].ic+' '+DIFF[k].t+(k===state.diff?' ●':'')+'</div><div class="d">'+DIFF[k].d+'</div></button>';
+  });
+  h+='<button class="btn dim wide" onclick="closeModal()">Fermer</button>';
+  document.getElementById('sheet').innerHTML=h;
+  document.getElementById('modal').classList.add('on');
+}
+function setDiff(k){ state.diff=k; save(); closeModal(); render(); toast('Difficulté : '+DIFF[k].ic+' '+DIFF[k].t); }
 
 /* ================= PROGRAMME ================= */
 function renderProg(){
   const lvl=levelInfo(), nx=nextSession();
   let h = '<div class="hero"><div class="eyebrow" style="color:#BFE39A">Ton programme · Niveau '+lvl.name+'</div>'
     + '<h2>'+state.prog.name+'</h2>'
-    + '<p>3 séances / semaine · repos '+OBJ[state.objective].rest+' s entre séries · échauffement 5 min.'
+    + '<p>3 séances / semaine · repos '+restSecs()+' s entre séries · échauffement 5 min.'
     + (state.history.length?'<br>Prochaine séance conseillée : <b style="color:var(--sun)">Séance '+nx+'</b>':'')+'</p>'
-    + '<div style="margin-top:10px"><button class="btn sun sm" onclick="openObj()">🎯 Objectif : '+OBJ[state.objective].t+' ▾</button></div></div>';
+    + '<div style="margin-top:10px" class="row"><button class="btn sun sm" onclick="openObj()">🎯 '+OBJ[state.objective].t+'</button>'
+    + '<button class="btn ghost sm" onclick="openDiff()">'+DIFF[state.diff].ic+' '+DIFF[state.diff].t+'</button></div></div>';
+  h += '<button class="btn dim wide" style="margin-bottom:12px" onclick="startWarm()">🔥 Lancer l\'échauffement guidé · 4 min</button>';
 
   /* Suggestions d'évolution */
   suggestions().forEach(sg=>{
@@ -644,18 +819,18 @@ function renderProg(){
     h += '<div class="sess"'+(isNext?' style="border-color:var(--sun)"':'')+'><div class="head"><h3>'+s.title+'</h3><span class="badge-sun">'+(isNext?'▶ À toi':s.hint)+'</span></div>';
     s.items.forEach((it,ii)=>{
       const e=EX[it.ex]; if(!e) return;
-      h += '<div class="exline"><div class="thumb">'+figSVG(it.ex,66)+'</div>'
+      h += '<div class="exline" style="border-left:3px solid '+catColor(e.cat)+'"><div class="thumb">'+figSVG(it.ex,66)+'</div>'
         + '<div class="grow"><div class="nm">'+e.n+'</div><div class="sub">'+e.ms+'</div></div>';
       if(editing){
         h += '<input value="'+it.sets+'×'+it.reps+'" onchange="editItem('+si+','+ii+',this.value)" aria-label="séries et répétitions">'
           + '<button class="del" onclick="delItem('+si+','+ii+')" aria-label="supprimer">✕</button>';
       } else {
-        h += '<span class="pill">'+it.sets+'×'+it.reps+'</span>';
+        h += '<span class="pill">'+it.sets+'×'+scaleReps(it.reps)+'</span>';
       }
       h += '</div>';
     });
     if(editing){
-      h += '<div class="foot"><select class="addex" onchange="addItem('+si+',this.value);this.value=\'\'">'
+      h += '<div class="foot"><p class="muted" style="font-size:11.5px">Tu édites les valeurs de base (Normal). La difficulté '+DIFF[state.diff].ic+' s\'applique par-dessus.</p><select class="addex" onchange="addItem('+si+',this.value);this.value=\'\'">'
         + '<option value="">+ Ajouter un exercice…</option>'
         + Object.keys(EX).map(k=>'<option value="'+k+'">'+EX[k].n+'</option>').join('')+'</select></div>';
     } else {
@@ -664,7 +839,7 @@ function renderProg(){
     h += '</div>';
   });
   h += '<p class="muted" style="margin:4px 2px 16px">💡 En séance, valide tes séries puis coche « Haut de fourchette atteint » quand c\'est le cas : après 2 séances réussies, l\'appli te proposera automatiquement d\'évoluer.</p>';
-  M.innerHTML=h;
+  M.innerHTML='<div class="fx">'+h+'</div>';
 }
 function toggleEdit(){ editing=!editing; if(!editing){ save(); toast('Programme enregistré'); } renderProg(); }
 function editItem(si,ii,v){
@@ -685,17 +860,18 @@ function startRun(si){
 }
 function renderRun(){
   const s=state.prog.sessions[run.si], it=s.items[run.idx], e=EX[it.ex];
-  const total=s.items.length, rest=OBJ[state.objective].rest;
+  const total=s.items.length, rest=restSecs();
   let h='<div>'
    +'<div class="row"><button class="btn dim" onclick="quitRun()">✕ Quitter</button>'
    +'<div class="grow" style="text-align:right"><span class="eyebrow">'+s.title+'</span></div></div>'
    +'<div class="prog"><i style="width:'+Math.round((run.idx)/total*100)+'%"></i></div>'
    +'<div class="muted" style="font-size:11px;text-transform:uppercase;letter-spacing:.1em">Exercice '+(run.idx+1)+' / '+total+'</div>'
    +'<h2 style="font-size:22px;margin-top:2px">'+e.n+'</h2>'
-   +'<div class="row" style="margin-top:4px"><span class="pill">'+it.sets+'×'+it.reps+'</span><span class="muted" style="font-size:12px">'+e.ms+'</span></div>'
+   +'<div class="row" style="margin-top:4px"><span class="pill">'+it.sets+'×'+scaleReps(it.reps)+'</span><span class="muted" style="font-size:12px">'+e.ms+'</span></div>'
    +'<div class="runill">'+figSVG(it.ex,600)+'</div>';
+  const ci=e.chain.indexOf(e.n), reg=ci>0?e.chain[ci-1]:null;
   if(run.rest>0){
-    h+='<div class="eyebrow" style="text-align:center">Repos</div><div class="timer">'+run.rest+'<span style="font-size:20px">s</span></div>'
+    h+='<div class="eyebrow" style="text-align:center">Repos</div>'+ring(run.rest,rest,'#FFD400',150)
       +'<button class="btn ghost wide" onclick="skipRest()">Passer le repos</button>';
   } else {
     h+='<div class="eyebrow">Valide chaque série</div><div class="setrow">';
@@ -704,7 +880,8 @@ function renderRun(){
     });
     h+='</div>'
      +'<button class="hitbtn '+(run.hit[run.idx]?'on':'')+'" onclick="tickHit()">'+(run.hit[run.idx]?'🎯 Haut de fourchette atteint — noté !':'🎯 Haut de fourchette atteint ? Tape ici si oui')+'</button>'
-     +'<p class="muted" style="margin-top:8px;font-size:12.5px">Tempo 2-1-2, amplitude complète. Repos '+rest+' s entre séries.</p>';
+     +'<a class="btn ghost wide" style="margin-top:10px" href="'+ytUrl(it.ex)+'" target="_blank" rel="noopener">▶ Voir la technique en vidéo</a>'
+     +'<p class="muted" style="margin-top:8px;font-size:12.5px">Tempo 2-1-2, amplitude complète, repos '+rest+' s.'+(reg?' Trop dur aujourd\'hui ? Régresse sans ego : '+reg+'.':'')+'</p>';
   }
   h+='<div style="margin-top:14px" class="row">'
     +(run.idx>0?'<button class="btn dim" onclick="moveRun(-1)">◀</button>':'')
@@ -716,11 +893,14 @@ function renderRun(){
 }
 function tickSet(k){
   run.done[run.idx][k]=!run.done[run.idx][k];
-  if(run.done[run.idx][k] && run.done[run.idx].some(x=>!x)){ startRest(OBJ[state.objective].rest); } else { renderRun(); }
+  if(run.done[run.idx][k] && run.done[run.idx].some(x=>!x)){ startRest(restSecs()); } else { renderRun(); }
 }
 function tickHit(){ run.hit[run.idx]=!run.hit[run.idx]; renderRun(); }
 function startRest(sec){ run.rest=sec; clearInterval(timerH);
-  timerH=setInterval(()=>{ if(!run){ clearInterval(timerH); return; } run.rest--; if(run.rest<=0){ clearInterval(timerH); run.rest=0; } renderRun(); },1000);
+  timerH=setInterval(()=>{ if(!run){ clearInterval(timerH); return; } run.rest--;
+    if(run.rest<=3&&run.rest>0){ beep(660,.1); vib(40); }
+    if(run.rest<=0){ clearInterval(timerH); run.rest=0; beep(990,.25); vib(180); }
+    renderRun(); },1000);
   renderRun(); }
 function skipRest(){ clearInterval(timerH); run.rest=0; renderRun(); }
 function moveRun(d){ clearInterval(timerH); run.rest=0; run.idx=Math.max(0,Math.min(state.prog.sessions[run.si].items.length-1,run.idx+d)); renderRun(); }
@@ -731,21 +911,204 @@ function finishRun(){
   const setsDone=run.done.flat().filter(Boolean).length;
   const setsTotal=run.done.flat().length;
   const mins=Math.max(1,Math.round((Date.now()-run.start)/60000));
-  const prevLvl=levelInfo().name;
-  state.history.unshift({date:new Date().toISOString(), sess:s.id, title:s.title, sets:setsDone, total:setsTotal, mins:mins});
-  /* moteur d'évolution : réussites par exercice */
+  const entry={date:new Date().toISOString(), sess:s.id, title:s.title, sets:setsDone, total:setsTotal, mins:mins};
   s.items.forEach((it,i)=>{
     if(run.hit[i]) state.exlog[it.ex]=(state.exlog[it.ex]||0)+1;
     else state.exlog[it.ex]=0;
   });
-  const newLvl=levelInfo().name;
-  save(); run=null;
+  run=null;
+  askRPE(entry);
+}
+/* ---- Ressenti de fin de séance (RPE) ---- */
+let pending=null;
+const RPE={easy:{e:'🥱',t:'Trop facile',d:'J\'en avais encore beaucoup sous le pied.'},
+           good:{e:'💪',t:'Parfait',d:'Difficile mais propre — la bonne zone.'},
+           hard:{e:'😮‍💨',t:'Trop dur',d:'Technique dégradée ou séries incomplètes.'}};
+function askRPE(entry){
+  pending=entry;
+  let h='<div class="handle"></div><h2>Comment c\'était ?</h2><p class="muted" style="margin-bottom:12px">Ton ressenti affine les prochains conseils.</p>';
+  Object.keys(RPE).forEach(k=>{
+    h+='<button class="rpebtn" onclick="setRPE(\''+k+'\')"><span class="e">'+RPE[k].e+'</span><b>'+RPE[k].t+'</b><div class="muted" style="font-size:12px;margin-top:2px">'+RPE[k].d+'</div></button>';
+  });
+  h+='<button class="btn dim wide" onclick="setRPE(null)">Passer</button>';
+  document.getElementById('sheet').innerHTML=h;
+  document.getElementById('modal').classList.add('on');
+}
+function setRPE(v){
+  if(pending){ if(v) pending.rpe=v; state.history.unshift(pending); pending=null; save(); }
+  closeModal();
   tab='suivi';
   document.querySelectorAll('.tabbar button').forEach(x=>x.classList.toggle('on',x.dataset.tab==='suivi'));
   render();
-  if(newLvl!==prevLvl) toast('🎖 Nouveau niveau : '+newLvl+' !');
-  else if(suggestions().length) toast('Séance enregistrée — une évolution t\'attend dans Programme 📈');
-  else toast('Séance '+s.id+' enregistrée — bravo ! 💪');
+  if(v==='easy') toast('🥱 Trop facile ? Monte la difficulté ('+DIFF.hard.ic+' Intense) ou coche 🎯');
+  else if(v==='hard') toast('😮‍💨 Trop dur ? Essaie '+DIFF.easy.ic+' Découverte ou une régression');
+  else toast('Séance enregistrée — bravo ! 💪');
+}
+
+/* ================= HIRT : ÉCRAN, BUILDER, RUNNER ================= */
+let hrun=null, hTimer=null, wlock=null, actx=null, hb=null;
+function beep(freq,dur){
+  try{
+    actx = actx || new (window.AudioContext||window.webkitAudioContext)();
+    const o=actx.createOscillator(), g=actx.createGain();
+    o.connect(g); g.connect(actx.destination);
+    o.frequency.value=freq; g.gain.setValueAtTime(.15,actx.currentTime);
+    o.start(); o.stop(actx.currentTime+dur);
+  }catch(e){}
+}
+async function grabWake(){ try{ if('wakeLock' in navigator) wlock=await navigator.wakeLock.request('screen'); }catch(e){} }
+function releaseWake(){ try{ if(wlock){ wlock.release(); wlock=null; } }catch(e){} }
+
+function hCard(w, custom, idx){
+  const src = custom ? 'state.hirt' : 'HPRESETS';
+  const sw = scaleH(w);
+  let h='<div class="sess"><div class="head"><h3>'+w.name+'</h3><span class="badge-sun">'+hFmtLabel(w.fmt)+' · ~'+hDur(sw)+' min</span></div>';
+  h+='<div style="padding:10px 12px">'+(w.note?'<p class="muted" style="font-size:12.5px">'+w.note+'</p>':'')
+    +(sw.work&&sw.work!==w.work?'<p class="muted" style="font-size:11.5px">'+DIFF[state.diff].ic+' Difficulté '+DIFF[state.diff].t+' : '+sw.work+' s effort / '+sw.rest+' s repos.</p>':'')
+    +'<div class="hchips">'+w.exs.map(x=>'<span style="border-left:3px solid '+catColor(EX[exKey(x)]?EX[exKey(x)].cat:'')+'">'+(x.reps?x.reps+' · ':'')+exName(x)+'</span>').join('')+'</div></div>';
+  h+='<div class="foot"><div class="row"><button class="btn sun grow" onclick="startHirt('+src+'['+idx+'])">▶ Lancer</button>'
+    +(custom?'<button class="btn danger" onclick="delHirt('+idx+')">🗑</button>':'')+'</div></div></div>';
+  return h;
+}
+function renderHirt(){
+  let h='<div class="hero"><div class="eyebrow" style="color:#BFE39A">HIRT · esprit Papa in Shape</div>'
+   +'<h2>Court, intense,<br><span class="accent">efficace</span></h2>'
+   +'<p>Le HIRT (High Intensity Resistance Training) : du renforcement full body enchaîné avec des repos courts, en 15 à 30 minutes — le format popularisé par Papa in Shape pour les emplois du temps chargés. Chrono guidé, bips sonores et écran anti-veille inclus.</p>'
+   +'<div style="margin-top:10px"><button class="btn ghost sm" onclick="openDiff()">'+DIFF[state.diff].ic+' Difficulté : '+DIFF[state.diff].t+'</button></div></div>';
+  h+='<button class="btn dim wide" style="margin-bottom:12px" onclick="startWarm()">🔥 Lancer l\'échauffement guidé · 4 min</button>';
+  h+='<div class="eyebrow" style="margin:2px 2px 8px">Séances prêtes à lancer</div>';
+  HPRESETS.forEach((w,i)=>{ h+=hCard(w,false,i); });
+  h+='<div class="eyebrow" style="margin:14px 2px 8px">Mes séances</div>';
+  if(!state.hirt.length) h+='<p class="muted" style="margin-bottom:10px">Crée tes propres circuits : exercices, temps d\'effort, temps de repos, nombre de tours.</p>';
+  state.hirt.forEach((w,i)=>{ h+=hCard(w,true,i); });
+  h+='<button class="btn ghost wide" onclick="openHB()">＋ Créer ma séance HIRT</button>';
+  h+='<p class="muted" style="margin:12px 2px 16px">💡 Le HIRT complète ton programme callisthénie, il ne le remplace pas : garde 24 h entre un HIRT intense et une séance ciblant les mêmes muscles, et évite un HIRT jambes la veille d\'une sortie course.</p>';
+  M.innerHTML='<div class="fx">'+h+'</div>';
+}
+/* ---- Builder ---- */
+function openHB(){ hb={name:'Ma séance HIRT', fmt:'circuit', work:40, rest:20, rounds:3, exs:[]}; renderHB(); }
+function hbSet(f,v){ hb[f] = (f==='name') ? (v.trim()||hb.name) : Math.max(f==='rest'?0:1, parseInt(v)||hb[f]); }
+function hbAdd(k){ if(k&&EX[k]) hb.exs.push(k); renderHB(); }
+function hbDel(i){ hb.exs.splice(i,1); renderHB(); }
+function hbSave(){
+  if(!hb.exs.length){ toast('Ajoute au moins un exercice'); return; }
+  state.hirt.push(hb); save(); hb=null; closeModal(); renderHirt(); toast('Séance HIRT enregistrée ⚡');
+}
+function delHirt(i){ if(confirm('Supprimer cette séance ?')){ state.hirt.splice(i,1); save(); renderHirt(); } }
+function renderHB(){
+  let h='<div class="handle"></div><h2>Créer une séance HIRT</h2>'
+   +'<div class="hfield" style="margin-top:10px"><label>Nom</label><input value="'+hb.name.replace(/"/g,'&quot;')+'" onchange="hbSet(\'name\',this.value)"></div>'
+   +'<div class="hnum">'
+   +'<div class="hfield"><label>Effort (s)</label><input type="number" inputmode="numeric" value="'+hb.work+'" onchange="hbSet(\'work\',this.value);renderHB()"></div>'
+   +'<div class="hfield"><label>Repos (s)</label><input type="number" inputmode="numeric" value="'+hb.rest+'" onchange="hbSet(\'rest\',this.value);renderHB()"></div>'
+   +'<div class="hfield"><label>Tours</label><input type="number" inputmode="numeric" value="'+hb.rounds+'" onchange="hbSet(\'rounds\',this.value);renderHB()"></div></div>'
+   +'<div class="hfield"><label>Exercices (dans l\'ordre)</label>';
+  hb.exs.forEach((k,i)=>{ h+='<div class="hexline"><span class="grow">'+(i+1)+'. '+EX[k].n+'</span><button onclick="hbDel('+i+')" style="background:none;border:none;color:var(--danger);font-size:16px;cursor:pointer">✕</button></div>'; });
+  h+='<select class="addex" style="margin-top:8px" onchange="hbAdd(this.value);this.value=\'\'"><option value="">+ Ajouter un exercice…</option>'
+   +Object.keys(EX).map(k=>'<option value="'+k+'">'+EX[k].n+'</option>').join('')+'</select></div>'
+   +'<p class="muted" style="font-size:12px;margin:8px 0 12px">Durée estimée : ~'+Math.ceil(hb.rounds*Math.max(1,hb.exs.length)*(hb.work+hb.rest)/60)+' min · Astuce : 20 s / 10 s × 8 tours avec 1-2 exercices = un Tabata.</p>'
+   +'<div class="row"><button class="btn sun grow" onclick="hbSave()">Enregistrer</button><button class="btn dim" onclick="hb=null;closeModal()">Annuler</button></div>';
+  document.getElementById('sheet').innerHTML=h;
+  document.getElementById('modal').classList.add('on');
+}
+/* ---- Runner ---- */
+function buildPhases(w){
+  const P=[{t:'prep',dur:10,ex:exKey(w.exs[0]),label:'Prépare-toi',sub:'Premier exercice : '+exName(w.exs[0])}];
+  if(w.fmt==='circuit'){
+    for(let r=1;r<=w.rounds;r++) w.exs.forEach((x,i)=>{
+      P.push({t:'work',dur:w.work,ex:exKey(x),label:exName(x),sub:'Tour '+r+' / '+w.rounds});
+      const last=(r===w.rounds && i===w.exs.length-1);
+      if(!last && w.rest>0){ const nx=w.exs[(i+1)%w.exs.length];
+        P.push({t:'rest',dur:w.rest,ex:exKey(nx),label:'Repos',sub:'Ensuite : '+exName(nx)}); }
+    });
+  } else if(w.fmt==='tabata'){
+    for(let r=0;r<w.rounds;r++){
+      const x=w.exs[r%w.exs.length];
+      P.push({t:'work',dur:w.work,ex:exKey(x),label:exName(x),sub:'Intervalle '+(r+1)+' / '+w.rounds});
+      if(r<w.rounds-1){ const nx=w.exs[(r+1)%w.exs.length];
+        P.push({t:'rest',dur:w.rest,ex:exKey(nx),label:'Repos',sub:'Ensuite : '+exName(nx)}); }
+    }
+  } else if(w.fmt==='emom'){
+    for(let m=0;m<w.minutes;m++){
+      const x=w.exs[m%w.exs.length];
+      P.push({t:'work',dur:60,ex:exKey(x),label:(x.reps?x.reps+' · ':'')+exName(x),sub:'Minute '+(m+1)+' / '+w.minutes+' — reps faites = repos'});
+    }
+  } else {
+    P.push({t:'amrap',dur:w.minutes*60,ex:exKey(w.exs[0]),label:'Max de tours',sub:'Enchaîne le circuit, compte tes tours'});
+  }
+  return P;
+}
+function startHirt(w){
+  w=scaleH(w);
+  hrun={w:w, ph:buildPhases(w), pi:0, left:0, paused:false, tours:0, start:Date.now(), total:0};
+  hrun.total=hrun.ph.reduce((a,p)=>a+p.dur,0);
+  hrun.left=hrun.ph[0].dur;
+  grabWake(); beep(880,.12);
+  clearInterval(hTimer); hTimer=setInterval(hTick,1000);
+  renderHRun();
+}
+function startWarm(){
+  const P=[{t:'prep',dur:5,ex:'jack',label:'Prépare-toi',sub:'Échauffement complet · 8 étapes'}];
+  WARM.forEach((w,i)=>P.push({t:'work',dur:30,ex:w.ex,label:w.label,sub:'Étape '+(i+1)+' / '+WARM.length+' · en douceur, grande amplitude'}));
+  hrun={w:{name:'Échauffement guidé'}, ph:P, pi:0, left:P[0].dur, paused:false, tours:0, start:Date.now(),
+        total:P.reduce((a,p)=>a+p.dur,0), nolog:true};
+  grabWake(); beep(880,.12);
+  clearInterval(hTimer); hTimer=setInterval(hTick,1000);
+  renderHRun();
+}
+function hTick(){
+  if(!hrun){ clearInterval(hTimer); return; }
+  if(hrun.paused) return;
+  hrun.left--;
+  if(hrun.left<=3 && hrun.left>0){ beep(660,.1); vib(40); }
+  if(hrun.left<=0){
+    if(hrun.pi>=hrun.ph.length-1){ finishHirt(); return; }
+    hrun.pi++; hrun.left=hrun.ph[hrun.pi].dur;
+    beep(hrun.ph[hrun.pi].t==='work'||hrun.ph[hrun.pi].t==='amrap'?990:520,.25); vib(180);
+  }
+  renderHRun();
+}
+function hElapsed(){ let e=0; for(let i=0;i<hrun.pi;i++) e+=hrun.ph[i].dur; return e+(hrun.ph[hrun.pi].dur-hrun.left); }
+function renderHRun(){
+  const p=hrun.ph[hrun.pi];
+  const isW=(p.t==='work'||p.t==='amrap');
+  const cls=isW?'work':(p.t==='rest'?'rest':'');
+  const col=isW?'hwork':(p.t==='rest'?'hrest':'hprep');
+  const mm=Math.floor(hrun.left/60), ss=String(hrun.left%60).padStart(2,'0');
+  const rc = isW?'#FFD400':(p.t==='rest'?'#7FC8F0':'#9DB295');
+  let h='<div class="row"><button class="btn dim" onclick="quitHirt()">✕ Quitter</button>'
+   +'<div class="grow" style="text-align:right"><span class="eyebrow">'+hrun.w.name+'</span></div></div>'
+   +'<div class="prog"><i style="width:'+Math.round(hElapsed()/hrun.total*100)+'%"></i></div>'
+   +'<div class="hscreen '+cls+'">'
+   +'<div class="hphase '+col+'">'+(p.t==='prep'?'Prépare-toi':(p.t==='rest'?'Repos':(p.t==='amrap'?'AMRAP':'Travail')))+'</div>'
+   +ring(hrun.left,p.dur,rc,168)
+   +'<div style="text-align:center;font-family:var(--disp);font-weight:800;text-transform:uppercase;font-size:16px">'+p.label+'</div>'
+   +(p.sub?'<div class="muted" style="text-align:center;font-size:12px;margin-top:2px">'+p.sub+'</div>':'')
+   +'<div class="runill" style="margin-top:10px">'+figSVG(p.ex,600)+'</div>';
+  if(p.t==='amrap'){
+    h+='<div class="hchips" style="justify-content:center">'+hrun.w.exs.map(x=>'<span>'+(x.reps?x.reps+' · ':'')+exName(x)+'</span>').join('')+'</div>'
+     +'<button class="btn sun wide" style="margin-top:10px" onclick="hrun.tours++;beep(880,.1);renderHRun()">＋1 tour terminé ('+hrun.tours+')</button>';
+  }
+  h+='</div>'
+   +'<div class="row" style="margin-top:12px">'
+   +'<button class="btn dim grow" onclick="hrun.paused=!hrun.paused;renderHRun()">'+(hrun.paused?'▶ Reprendre':'⏸ Pause')+'</button>'
+   +'<button class="btn ghost" onclick="hSkip()">Suivant ▶</button></div>';
+  M.innerHTML=h;
+}
+function hSkip(){ if(hrun.pi>=hrun.ph.length-1){ finishHirt(); return; } hrun.pi++; hrun.left=hrun.ph[hrun.pi].dur; renderHRun(); }
+function quitHirt(){ if(confirm('Quitter sans enregistrer ?')){ clearInterval(hTimer); hrun=null; releaseWake(); render(); } }
+function finishHirt(){
+  clearInterval(hTimer); releaseWake(); beep(990,.4); vib(250);
+  if(hrun.nolog){
+    hrun=null; render();
+    toast('Échauffé — à toi de jouer ! 🔥');
+    return;
+  }
+  const mins=Math.max(1,Math.round((Date.now()-hrun.start)/60000));
+  const entry={date:new Date().toISOString(), type:'hirt', name:hrun.w.name, mins:mins};
+  if(hrun.w.fmt==='amrap') entry.tours=hrun.tours;
+  hrun=null;
+  askRPE(entry);
 }
 
 /* ================= SUIVI ================= */
@@ -760,6 +1123,7 @@ function renderSuivi(){
   h+='<div class="grid2" style="margin-bottom:12px">'
     +'<div class="stat"><div class="v">'+week+'<span style="font-size:15px;color:var(--muted)"> / 3</span></div><div class="l">Cette semaine</div></div>'
     +'<div class="stat"><div class="v">'+state.history.length+'</div><div class="l">Séances au total</div></div></div>';
+  h+='<div class="card"><h3>4 dernières semaines</h3>'+heatmap()+'<p class="muted" style="font-size:11px;margin-top:8px">Chaque case = un jour. Jaune = séance faite, jaune clair = double séance.</p></div>';
   h+='<div class="card"><h3>Badges</h3><div class="bgrid" style="margin-top:8px">';
   badges().forEach(b=>{ h+='<div class="badge '+(b.ok?'won':'')+'"><div class="e">'+b.e+'</div><div class="n">'+b.n+'</div></div>'; });
   h+='</div></div>';
@@ -767,11 +1131,29 @@ function renderSuivi(){
   if(!state.history.length){ h+='<p class="muted">Aucune séance pour l\'instant. Lance ta première depuis l\'onglet Programme — t\'es partant ? 😉</p>'; }
   state.history.slice(0,30).forEach(x=>{
     const d=new Date(x.date);
-    h+='<div class="hline"><div><b>Séance '+x.sess+'</b> · '+x.sets+'/'+x.total+' séries<div class="d">'+d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'})+' · '+x.mins+' min</div></div><span class="badge-sun">✓</span></div>';
+    const lbl = x.type==='hirt'
+      ? '<b>⚡ '+x.name+'</b>'+(typeof x.tours==='number'?' · '+x.tours+' tour(s)':'')
+      : '<b>Séance '+x.sess+'</b> · '+x.sets+'/'+x.total+' séries';
+    const rp = x.rpe&&RPE[x.rpe] ? ' '+RPE[x.rpe].e : '';
+    h+='<div class="hline"><div>'+lbl+rp+'<div class="d">'+d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'})+' · '+x.mins+' min</div></div><span class="badge-sun">✓</span></div>';
   });
   h+='</div>';
   if(state.history.length) h+='<button class="btn danger wide" style="margin-top:4px" onclick="clearHist()">Effacer l\'historique</button>';
-  M.innerHTML=h;
+  M.innerHTML='<div class="fx">'+h+'</div>';
+}
+function dkey(d){ return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate(); }
+function heatmap(){
+  const today=new Date(); today.setHours(0,0,0,0);
+  const counts={};
+  state.history.forEach(x=>{ const k=dkey(new Date(x.date)); counts[k]=(counts[k]||0)+1; });
+  const start=new Date(today); start.setDate(today.getDate()-((today.getDay()+6)%7)-21);
+  let h='<div class="hm">'+['L','M','M','J','V','S','D'].map(c=>'<b>'+c+'</b>').join('');
+  for(let i=0;i<28;i++){
+    const d=new Date(start); d.setDate(start.getDate()+i);
+    const n=counts[dkey(d)]||0, fut=d>today;
+    h+='<i class="'+(n>=2?'hi':(n?'on':''))+(fut?' fut':'')+'"></i>';
+  }
+  return h+'</div>';
 }
 function clearHist(){ if(confirm('Effacer tout l\'historique ?')){ state.history=[]; state.exlog={}; save(); renderSuivi(); } }
 

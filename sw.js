@@ -1,4 +1,4 @@
-const CACHE = 'calisthenie-coach-v2';
+const CACHE = 'calisthenie-coach-v4';
 const ASSETS = [
   './',
   './index.html',
