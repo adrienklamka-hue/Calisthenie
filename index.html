@@ -25,17 +25,17 @@
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 html,body{height:100%}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.5;
-  padding-bottom:calc(76px + env(safe-area-inset-bottom))}
+  padding-bottom:calc(132px + env(safe-area-inset-bottom))}
 h1,h2,h3,.disp{font-family:var(--disp);text-transform:uppercase;letter-spacing:.03em;font-weight:800}
-header.app{padding:18px 16px 10px;display:flex;align-items:baseline;justify-content:space-between}
+header.app{padding:calc(14px + env(safe-area-inset-top)) 16px 10px;display:flex;align-items:baseline;justify-content:space-between}
 header.app h1{font-size:22px;color:var(--sun)}
 header.app .sub{font-size:11px;color:var(--muted);letter-spacing:.12em;text-transform:uppercase}
 main{padding:0 14px;max-width:640px;margin:0 auto}
 .tabbar{position:fixed;left:0;right:0;bottom:0;display:flex;background:rgba(15,25,17,.96);
   backdrop-filter:blur(10px);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom);z-index:50}
 .tabbar button{flex:1;background:none;border:none;color:var(--muted);font-family:var(--disp);
-  text-transform:uppercase;font-size:10.5px;letter-spacing:.06em;padding:10px 2px 8px;cursor:pointer}
-.tabbar button .ic{display:block;font-size:20px;margin-bottom:2px}
+  text-transform:uppercase;font-size:10px;letter-spacing:.05em;padding:8px 2px 7px;cursor:pointer}
+.tabbar button .ic{display:block;font-size:18px;margin-bottom:2px}
 .tabbar button.on{color:var(--sun)}
 .card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px;margin-bottom:12px}
 .card h3{font-size:15px;margin-bottom:6px}
@@ -903,7 +903,7 @@ function startRest(sec){ run.rest=sec; clearInterval(timerH);
     renderRun(); },1000);
   renderRun(); }
 function skipRest(){ clearInterval(timerH); run.rest=0; renderRun(); }
-function moveRun(d){ clearInterval(timerH); run.rest=0; run.idx=Math.max(0,Math.min(state.prog.sessions[run.si].items.length-1,run.idx+d)); renderRun(); }
+function moveRun(d){ clearInterval(timerH); run.rest=0; run.idx=Math.max(0,Math.min(state.prog.sessions[run.si].items.length-1,run.idx+d)); window.scrollTo(0,0); renderRun(); }
 function quitRun(){ if(confirm('Quitter sans enregistrer la séance ?')){ clearInterval(timerH); run=null; render(); } }
 function finishRun(){
   clearInterval(timerH);
@@ -1095,7 +1095,7 @@ function renderHRun(){
    +'<button class="btn ghost" onclick="hSkip()">Suivant ▶</button></div>';
   M.innerHTML=h;
 }
-function hSkip(){ if(hrun.pi>=hrun.ph.length-1){ finishHirt(); return; } hrun.pi++; hrun.left=hrun.ph[hrun.pi].dur; renderHRun(); }
+function hSkip(){ if(hrun.pi>=hrun.ph.length-1){ finishHirt(); return; } hrun.pi++; hrun.left=hrun.ph[hrun.pi].dur; window.scrollTo(0,0); renderHRun(); }
 function quitHirt(){ if(confirm('Quitter sans enregistrer ?')){ clearInterval(hTimer); hrun=null; releaseWake(); render(); } }
 function finishHirt(){
   clearInterval(hTimer); releaseWake(); beep(990,.4); vib(250);
