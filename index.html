@@ -591,6 +591,66 @@ function ring(sec,total,color,size){
 }
 function vib(ms){ try{ if(navigator.vibrate) navigator.vibrate(ms); }catch(e){} }
 
+/* ================= COACH VOCAL ================= */
+const CUES={pompe:'Corps gainé, coudes à quarante-cinq degrés.',
+ pompe_inc:'Corps rigide, descends la poitrine vers le support.',
+ pike:'Hanches hautes, le crâne descend entre les mains.',
+ dips:'Coudes vers l\'arrière, épaules loin des oreilles.',
+ squat:'Talons au sol, pousse les hanches en arrière.',
+ fente:'Buste droit, genou au-dessus de la cheville.',
+ bulg:'Tout le poids sur la jambe avant.',
+ bridge:'Serre fort les fessiers en haut.',
+ planche:'Une ligne droite des talons à la tête, respire.',
+ side:'Bassin haut, ligne droite.',
+ hollow:'Bas du dos plaqué au sol.',
+ superman:'Regard vers le sol, monte bras et jambes ensemble.',
+ row:'Serre les omoplates, corps gainé.',
+ negpull:'Descends le plus lentement possible.',
+ climber:'Dos plat, hanches basses.',
+ burpee:'Amortis toujours genoux fléchis.',
+ jack:'Réception souple sur l\'avant du pied.',
+ knees:'Genoux à hauteur de hanche, buste droit.',
+ jsquat:'Explose en montant, amortis en douceur.'};
+function frVoice(){ try{ return speechSynthesis.getVoices().find(v=>v.lang&&v.lang.toLowerCase().startsWith('fr')); }catch(e){ return null; } }
+function speak(t,prio){
+  if(!state.voice) return;
+  try{
+    if(prio) speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(t);
+    u.lang='fr-FR'; u.rate=1.03;
+    const v=frVoice(); if(v) u.voice=v;
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+function shutUp(){ try{ speechSynthesis.cancel(); }catch(e){} }
+function toggleVoice(){
+  state.voice=!state.voice; save();
+  if(state.voice) speak('Coach vocal activé.',true); else shutUp();
+  if(run) renderRun(); else if(hrun) renderHRun();
+}
+function repsSpoken(r){
+  return String(r).replace('s/c',' secondes par côté').replace(/s$/,' secondes')
+    .replace('/jambe',' par jambe').replace('/j',' par jambe').replace(/-/g,' à ');
+}
+function sayEx(){
+  if(!run) return;
+  const it=run.s.items[run.idx], e=EX[it.ex];
+  speak(e.n+'. '+it.sets+' séries de '+repsSpoken(scaleReps(it.reps))+'. '+(CUES[it.ex]||''),true);
+}
+
+/* ================= MÉTRONOME TEMPO 2-1-2 ================= */
+let metH=null, metStep=0;
+function startMetro(){ stopMetro(); metStep=0;
+  metH=setInterval(()=>{ const s=metStep%5;
+    if(s===0) beep(330,.4); else if(s===2) beep(560,.1); else if(s===3) beep(880,.4);
+    metStep++; },1000); }
+function stopMetro(){ if(metH){ clearInterval(metH); metH=null; } }
+function toggleMetro(){
+  if(metH){ stopMetro(); }
+  else { startMetro(); speak('Tempo deux, un, deux. Descends sur le grave, remonte sur l\'aigu.',true); }
+  renderRun();
+}
+
 /* ================= ÉCHAUFFEMENT GUIDÉ ================= */
 const WARM=[
  {ex:'jack',label:'Jumping jacks légers'},
@@ -616,7 +676,7 @@ const COURSE = [
 
 /* ================= ÉTAT & STOCKAGE ================= */
 let state = null; let mem=false;
-function fresh(){ return {objective:'physique', prog:JSON.parse(JSON.stringify(PROGS.physique)), history:[], exlog:{}, hirt:[], diff:'normal'}; }
+function fresh(){ return {objective:'physique', prog:JSON.parse(JSON.stringify(PROGS.physique)), history:[], exlog:{}, hirt:[], diff:'normal', voice:true}; }
 async function load(){
   try{
     const raw = localStorage.getItem('calis:v2');
@@ -626,6 +686,7 @@ async function load(){
   if(!state.exlog) state.exlog={};
   if(!state.hirt) state.hirt=[];
   if(!state.diff) state.diff='normal';
+  if(state.voice===undefined) state.voice=true;
   render();
 }
 async function save(){
@@ -688,17 +749,104 @@ function applyBump(k){
 function dismissSugg(k){ state.exlog[k]=0; save(); renderProg(); }
 function nextSession(){
   const order=state.prog.sessions.map(s=>s.id);
-  const lastE=state.history.find(x=>x.sess);
+  const lastE=state.history.find(x=>x.sess && x.sess!=='J');
   if(!lastE) return order[0];
   const i=order.indexOf(lastE.sess);
   return order[(i+1)%order.length] || order[0];
+}
+
+/* ================= GÉNÉRATEUR DE SÉANCE DU JOUR ================= */
+const DEFREPS={pompe:'8-12',pompe_inc:'12-15',pike:'6-10',dips:'10-15',squat:'15-20',fente:'10/jambe',
+ bulg:'8-12/j',bridge:'15-20',planche:'30-45s',side:'20-30s/c',hollow:'20-30s',superman:'12-15',
+ row:'8-12',negpull:'4-6',climber:'30s',burpee:'8-12',jack:'30s',knees:'30s',jsquat:'10-15'};
+const FAMNAME={push:'Poussée',pull:'Tirage',legs:'Jambes',core:'Gainage',cardio:'Cardio'};
+function famOf(k){ const c=EX[k].cat;
+  if(c.indexOf('Poussée')===0) return 'push';
+  if(c.indexOf('Tirage')===0) return 'pull';
+  if(c==='Squat'||c==='Hanche (hinge)') return 'legs';
+  if(c==='Gainage'||c==='Chaîne postérieure') return 'core';
+  return 'cardio'; }
+function famHistory(){
+  const now=Date.now(), last={}, cnt={push:0,pull:0,legs:0,core:0,cardio:0};
+  state.history.forEach(x=>{
+    let keys=x.exs;
+    if(!keys && x.sess){ const s=state.prog.sessions.find(z=>z.id===x.sess); if(s) keys=s.items.map(i=>i.ex); }
+    if(!keys) return;
+    const hrs=(now-new Date(x.date).getTime())/3600000;
+    keys.forEach(k=>{ if(!EX[k]) return; const f=famOf(k);
+      if(last[f]===undefined||hrs<last[f]) last[f]=hrs;
+      if(hrs<=168) cnt[f]++; });
+  });
+  return {last:last,cnt:cnt};
+}
+function genSession(mins, ranToday){
+  const nEx = mins<=15?3:(mins<=30?5:6);
+  const fh=famHistory();
+  const pool=Object.keys(EX).filter(k=>!(ranToday&&(k==='jsquat'||k==='burpee')));
+  function score(k){
+    const f=famOf(k);
+    let sc=10 - Math.min(10,(fh.cnt[f]||0)*2);
+    const lh=fh.last[f];
+    if(lh!==undefined&&lh<40) sc-=8;
+    if(lh===undefined) sc+=4;
+    if(ranToday&&f==='legs') sc-=7;
+    if(ranToday&&f==='cardio') sc-=4;
+    return sc+Math.random()*3;
+  }
+  const ranked=pool.map(k=>({k:k,f:famOf(k),sc:score(k)})).sort((a,b)=>b.sc-a.sc);
+  const picked=[], perFam={};
+  for(const c of ranked){
+    if(picked.length>=nEx) break;
+    if((perFam[c.f]||0)>=2) continue;
+    picked.push(c.k); perFam[c.f]=(perFam[c.f]||0)+1;
+  }
+  if(!picked.some(k=>famOf(k)==='core')){
+    const core=ranked.find(c=>c.f==='core'&&picked.indexOf(c.k)<0);
+    if(core) picked[picked.length-1]=core.k;
+  }
+  const order={push:0,pull:1,legs:2,cardio:3,core:4};
+  picked.sort((a,b)=>order[famOf(a)]-order[famOf(b)]);
+  const sets=mins>=45?4:3;
+  return {id:'J', title:'Séance du jour', hint:new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'}),
+          items:picked.map(k=>({ex:k, sets:sets, reps:DEFREPS[k]||'10-12'}))};
+}
+let genOpts={mins:30, ran:false}, genPrev=null;
+function openGen(){ genPrev=null; renderGen(); }
+function setGenMins(m){ genOpts.mins=m; genPrev=null; renderGen(); }
+function toggleGenRan(){ genOpts.ran=!genOpts.ran; genPrev=null; renderGen(); }
+function doGen(){ genPrev=genSession(genOpts.mins, genOpts.ran); renderGen(); }
+function launchGen(){ if(!genPrev) return; const s=genPrev; genPrev=null; closeModal(); startSession(s); }
+function renderGen(){
+  let h='<div class="handle"></div><h2>🎲 Séance du jour</h2>'
+   +'<p class="muted" style="margin-bottom:12px">Générée d\'après tes 7 derniers jours : les familles musculaires travaillées il y a moins de 48 h sont mises de côté, les délaissées passent en priorité.</p>'
+   +'<div class="hfield"><label>Durée</label><div class="row">'
+   +[15,30,45].map(m=>'<button class="btn '+(genOpts.mins===m?'sun':'dim')+' sm grow" onclick="setGenMins('+m+')">'+m+' min</button>').join('')
+   +'</div></div>'
+   +'<button class="hitbtn '+(genOpts.ran?'on':'')+'" onclick="toggleGenRan()">🏃 '+(genOpts.ran?'Course aujourd\'hui — jambes préservées':'J\'ai couru (ou je cours) aujourd\'hui ?')+'</button>';
+  if(genPrev){
+    h+='<div class="eyebrow" style="margin:14px 2px 6px">'+genPrev.hint+'</div>';
+    genPrev.items.forEach(it=>{
+      const e=EX[it.ex];
+      h+='<div class="exline" style="border-left:3px solid '+catColor(e.cat)+';border-top:1px solid var(--line)">'
+        +'<div class="thumb">'+figSVG(it.ex,66)+'</div>'
+        +'<div class="grow"><div class="nm">'+e.n+'</div><div class="sub">'+FAMNAME[famOf(it.ex)]+' · '+e.ms+'</div></div>'
+        +'<span class="pill">'+it.sets+'×'+scaleReps(it.reps)+'</span></div>';
+    });
+    h+='<div class="row" style="margin-top:12px"><button class="btn sun grow" onclick="launchGen()">▶ Lancer cette séance</button>'
+      +'<button class="btn ghost" onclick="doGen()">🎲</button></div>';
+  } else {
+    h+='<button class="btn sun wide" style="margin-top:12px" onclick="doGen()">Générer ma séance</button>';
+  }
+  h+='<button class="btn dim wide" style="margin-top:10px" onclick="closeModal()">Fermer</button>';
+  document.getElementById('sheet').innerHTML=h;
+  document.getElementById('modal').classList.add('on');
 }
 
 /* ================= NAVIGATION ================= */
 let tab='prog', editing=false, run=null, timerH=null;
 document.querySelectorAll('.tabbar button').forEach(b=>b.addEventListener('click',()=>{
   tab=b.dataset.tab; run=null; editing=false; clearInterval(timerH);
-  hrun=null; clearInterval(hTimer); releaseWake();
+  hrun=null; clearInterval(hTimer); releaseWake(); stopMetro(); shutUp();
   document.querySelectorAll('.tabbar button').forEach(x=>x.classList.toggle('on',x===b));
   render();
 }));
@@ -802,7 +950,8 @@ function renderProg(){
     + (state.history.length?'<br>Prochaine séance conseillée : <b style="color:var(--sun)">Séance '+nx+'</b>':'')+'</p>'
     + '<div style="margin-top:10px" class="row"><button class="btn sun sm" onclick="openObj()">🎯 '+OBJ[state.objective].t+'</button>'
     + '<button class="btn ghost sm" onclick="openDiff()">'+DIFF[state.diff].ic+' '+DIFF[state.diff].t+'</button></div></div>';
-  h += '<button class="btn dim wide" style="margin-bottom:12px" onclick="startWarm()">🔥 Lancer l\'échauffement guidé · 4 min</button>';
+  h += '<div class="row" style="margin-bottom:12px"><button class="btn dim grow" onclick="startWarm()">🔥 Échauffement · 4 min</button>'
+    + '<button class="btn ghost grow" onclick="openGen()">🎲 Séance du jour</button></div>';
 
   /* Suggestions d'évolution */
   suggestions().forEach(sg=>{
@@ -854,16 +1003,18 @@ function addItem(si,k){ if(!k) return; state.prog.sessions[si].items.push({ex:k,
 function resetProg(){ if(confirm('Revenir au programme d\'origine de cet objectif ?')){ state.prog=JSON.parse(JSON.stringify(PROGS[state.objective])); editing=false; save(); renderProg(); } }
 
 /* ================= MODE SÉANCE ================= */
-function startRun(si){
-  const s=state.prog.sessions[si];
-  run={si:si, idx:0, done:s.items.map(it=>Array(it.sets).fill(false)), hit:s.items.map(()=>false), start:Date.now(), rest:0};
+function startRun(si){ startSession(state.prog.sessions[si]); }
+function startSession(s){
+  run={s:s, idx:0, done:s.items.map(it=>Array(it.sets).fill(false)), hit:s.items.map(()=>false), start:Date.now(), rest:0};
   renderRun();
+  speak((s.id==='J'?'Séance du jour':'Séance '+s.id)+', c\'est parti !',true); setTimeout(sayEx,1400);
 }
 function renderRun(){
-  const s=state.prog.sessions[run.si], it=s.items[run.idx], e=EX[it.ex];
+  const s=run.s, it=s.items[run.idx], e=EX[it.ex];
   const total=s.items.length, rest=restSecs();
   let h='<div>'
    +'<div class="row"><button class="btn dim" onclick="quitRun()">✕ Quitter</button>'
+   +'<button class="btn '+(state.voice?'sun':'dim')+' sm" onclick="toggleVoice()" aria-label="coach vocal">'+(state.voice?'🔊':'🔇')+'</button>'
    +'<div class="grow" style="text-align:right"><span class="eyebrow">'+s.title+'</span></div></div>'
    +'<div class="prog"><i style="width:'+Math.round((run.idx)/total*100)+'%"></i></div>'
    +'<div class="muted" style="font-size:11px;text-transform:uppercase;letter-spacing:.1em">Exercice '+(run.idx+1)+' / '+total+'</div>'
@@ -881,6 +1032,7 @@ function renderRun(){
     });
     h+='</div>'
      +'<button class="hitbtn '+(run.hit[run.idx]?'on':'')+'" onclick="tickHit()">'+(run.hit[run.idx]?'🎯 Haut de fourchette atteint — noté !':'🎯 Haut de fourchette atteint ? Tape ici si oui')+'</button>'
+     +'<button class="hitbtn '+(metH?'on':'')+'" style="margin-top:8px" onclick="toggleMetro()">'+(metH?'🎵 Métronome tempo 2-1-2 — actif (grave = descente, aigu = montée)':'🎵 Lancer le métronome tempo 2-1-2')+'</button>'
      +'<a class="btn ghost wide" style="margin-top:10px" href="'+ytUrl(it.ex)+'" target="_blank" rel="noopener">▶ Voir la technique en vidéo</a>'
      +'<p class="muted" style="margin-top:8px;font-size:12.5px">Tempo 2-1-2, amplitude complète, repos '+rest+' s.'+(reg?' Trop dur aujourd\'hui ? Régresse sans ego : '+reg+'.':'')+'</p>';
   }
@@ -894,25 +1046,25 @@ function renderRun(){
 }
 function tickSet(k){
   run.done[run.idx][k]=!run.done[run.idx][k];
-  if(run.done[run.idx][k] && run.done[run.idx].some(x=>!x)){ startRest(restSecs()); } else { renderRun(); }
+  if(run.done[run.idx][k] && run.done[run.idx].some(x=>!x)){ startRest(restSecs()); speak('Repos.'); } else { renderRun(); }
 }
 function tickHit(){ run.hit[run.idx]=!run.hit[run.idx]; renderRun(); }
-function startRest(sec){ run.rest=sec; clearInterval(timerH);
+function startRest(sec){ stopMetro(); run.rest=sec; clearInterval(timerH);
   timerH=setInterval(()=>{ if(!run){ clearInterval(timerH); return; } run.rest--;
     if(run.rest<=3&&run.rest>0){ beep(660,.1); vib(40); }
-    if(run.rest<=0){ clearInterval(timerH); run.rest=0; beep(990,.25); vib(180); }
+    if(run.rest<=0){ clearInterval(timerH); run.rest=0; beep(990,.25); vib(180); speak('C\'est reparti !',true); }
     renderRun(); },1000);
   renderRun(); }
 function skipRest(){ clearInterval(timerH); run.rest=0; renderRun(); }
-function moveRun(d){ clearInterval(timerH); run.rest=0; run.idx=Math.max(0,Math.min(state.prog.sessions[run.si].items.length-1,run.idx+d)); M.scrollTop=0; renderRun(); }
-function quitRun(){ if(confirm('Quitter sans enregistrer la séance ?')){ clearInterval(timerH); run=null; render(); } }
+function moveRun(d){ clearInterval(timerH); stopMetro(); run.rest=0; run.idx=Math.max(0,Math.min(run.s.items.length-1,run.idx+d)); M.scrollTop=0; renderRun(); sayEx(); }
+function quitRun(){ if(confirm('Quitter sans enregistrer la séance ?')){ clearInterval(timerH); stopMetro(); shutUp(); run=null; render(); } }
 function finishRun(){
-  clearInterval(timerH);
-  const s=state.prog.sessions[run.si];
+  clearInterval(timerH); stopMetro(); speak('Séance terminée. Bravo !',true);
+  const s=run.s;
   const setsDone=run.done.flat().filter(Boolean).length;
   const setsTotal=run.done.flat().length;
   const mins=Math.max(1,Math.round((Date.now()-run.start)/60000));
-  const entry={date:new Date().toISOString(), sess:s.id, title:s.title, sets:setsDone, total:setsTotal, mins:mins};
+  const entry={date:new Date().toISOString(), sess:s.id, title:s.title, sets:setsDone, total:setsTotal, mins:mins, exs:s.items.map(it=>it.ex)};
   s.items.forEach((it,i)=>{
     if(run.hit[i]) state.exlog[it.ex]=(state.exlog[it.ex]||0)+1;
     else state.exlog[it.ex]=0;
@@ -1041,6 +1193,7 @@ function buildPhases(w){
 }
 function startHirt(w){
   w=scaleH(w);
+  speak(w.name+'. C\'est parti !',true);
   hrun={w:w, ph:buildPhases(w), pi:0, left:0, paused:false, tours:0, start:Date.now(), total:0};
   hrun.total=hrun.ph.reduce((a,p)=>a+p.dur,0);
   hrun.left=hrun.ph[0].dur;
@@ -1049,6 +1202,7 @@ function startHirt(w){
   renderHRun();
 }
 function startWarm(){
+  speak('Échauffement guidé. On commence en douceur.',true);
   const P=[{t:'prep',dur:5,ex:'jack',label:'Prépare-toi',sub:'Échauffement complet · 8 étapes'}];
   WARM.forEach((w,i)=>P.push({t:'work',dur:30,ex:w.ex,label:w.label,sub:'Étape '+(i+1)+' / '+WARM.length+' · en douceur, grande amplitude'}));
   hrun={w:{name:'Échauffement guidé'}, ph:P, pi:0, left:P[0].dur, paused:false, tours:0, start:Date.now(),
@@ -1065,7 +1219,10 @@ function hTick(){
   if(hrun.left<=0){
     if(hrun.pi>=hrun.ph.length-1){ finishHirt(); return; }
     hrun.pi++; hrun.left=hrun.ph[hrun.pi].dur;
-    beep(hrun.ph[hrun.pi].t==='work'||hrun.ph[hrun.pi].t==='amrap'?990:520,.25); vib(180);
+    const np=hrun.ph[hrun.pi];
+    beep(np.t==='work'||np.t==='amrap'?990:520,.25); vib(180);
+    if(np.t==='rest') speak(np.sub||'Repos.',true);
+    else if(np.t==='work') speak(np.label+(np.dur>=30&&CUES[np.ex]?'. '+CUES[np.ex]:''),true);
   }
   renderHRun();
 }
@@ -1078,6 +1235,7 @@ function renderHRun(){
   const mm=Math.floor(hrun.left/60), ss=String(hrun.left%60).padStart(2,'0');
   const rc = isW?'#FFD400':(p.t==='rest'?'#7FC8F0':'#9DB295');
   let h='<div class="row"><button class="btn dim" onclick="quitHirt()">✕ Quitter</button>'
+   +'<button class="btn '+(state.voice?'sun':'dim')+' sm" onclick="toggleVoice()" aria-label="coach vocal">'+(state.voice?'🔊':'🔇')+'</button>'
    +'<div class="grow" style="text-align:right"><span class="eyebrow">'+hrun.w.name+'</span></div></div>'
    +'<div class="prog"><i style="width:'+Math.round(hElapsed()/hrun.total*100)+'%"></i></div>'
    +'<div class="hscreen '+cls+'">'
@@ -1097,19 +1255,107 @@ function renderHRun(){
   M.innerHTML=h;
 }
 function hSkip(){ if(hrun.pi>=hrun.ph.length-1){ finishHirt(); return; } hrun.pi++; hrun.left=hrun.ph[hrun.pi].dur; M.scrollTop=0; renderHRun(); }
-function quitHirt(){ if(confirm('Quitter sans enregistrer ?')){ clearInterval(hTimer); hrun=null; releaseWake(); render(); } }
+function quitHirt(){ if(confirm('Quitter sans enregistrer ?')){ clearInterval(hTimer); shutUp(); hrun=null; releaseWake(); render(); } }
 function finishHirt(){
   clearInterval(hTimer); releaseWake(); beep(990,.4); vib(250);
   if(hrun.nolog){
+    speak('Échauffé. À toi de jouer !',true);
     hrun=null; render();
     toast('Échauffé — à toi de jouer ! 🔥');
     return;
   }
+  speak('Séance terminée. Bravo !',true);
   const mins=Math.max(1,Math.round((Date.now()-hrun.start)/60000));
-  const entry={date:new Date().toISOString(), type:'hirt', name:hrun.w.name, mins:mins};
+  const entry={date:new Date().toISOString(), type:'hirt', name:hrun.w.name, mins:mins, exs:hrun.w.exs.map(exKey)};
   if(hrun.w.fmt==='amrap') entry.tours=hrun.tours;
   hrun=null;
   askRPE(entry);
+}
+
+/* ================= JARDIN DE PROGRESSION ================= */
+const MILESTONES=[
+ {at:3,  label:'le jeune arbre', v:'apparaisse'},
+ {at:10, label:'la barre de traction', v:'apparaisse'},
+ {at:12, label:'l\'arbre adulte', v:'apparaisse'},
+ {at:20, label:'le banc en bois', v:'apparaisse'},
+ {at:30, label:'les premiers fruits', v:'apparaissent'},
+ {at:60, label:'l\'arbre majestueux', v:'apparaisse'}];
+function gardenStats(){
+  const now=new Date(); const monday=new Date(now); monday.setHours(0,0,0,0);
+  monday.setDate(now.getDate()-((now.getDay()+6)%7));
+  const lastMonday=new Date(monday); lastMonday.setDate(monday.getDate()-7);
+  const month=new Date(monday); month.setDate(monday.getDate()-21);
+  let week=0,lastWeek=0; const recent=[];
+  state.history.forEach(x=>{ const d=new Date(x.date);
+    if(d>=monday) week++;
+    else if(d>=lastMonday) lastWeek++;
+    if(d>=month) recent.push(x); });
+  const weeks={}; state.history.forEach(x=>{ weeks[weekKey(x.date)]=1; });
+  const wk=Object.keys(weeks).sort(); let streak=0;
+  for(let i=wk.length-1;i>=0;i--){
+    const expect=new Date(monday); expect.setDate(monday.getDate()-7*(wk.length-1-i>=0? (streak):0));
+    break; }
+  // streak simple : semaines consécutives en remontant depuis cette semaine (ou la dernière)
+  streak=0; let cur=new Date(monday);
+  if(!weeks[weekKey(cur)]) cur.setDate(cur.getDate()-7);
+  while(weeks[weekKey(cur)]){ streak++; cur.setDate(cur.getDate()-7); }
+  return {total:state.history.length, week:week, lastWeek:lastWeek, recent:recent, streak:streak};
+}
+function gardenSVG(){
+  const g=gardenStats(), t=g.total; _fid++;
+  let s='<svg viewBox="0 0 220 140" width="600" style="display:block;width:100%" xmlns="http://www.w3.org/2000/svg" role="img">'+scene(_fid);
+  const rainy = t>0 && g.week===0 && g.lastWeek===0;
+  if(rainy){
+    s+='<ellipse cx="58" cy="22" rx="20" ry="9" fill="#93A7B4"/><ellipse cx="44" cy="26" rx="12" ry="7" fill="#A6B7C2"/><ellipse cx="72" cy="26" rx="13" ry="7" fill="#A6B7C2"/>';
+    for(let i=0;i<5;i++) s+='<path d="M'+(42+i*8)+',36 l-2,7" stroke="#7FC8F0" stroke-width="1.8" stroke-linecap="round"/>';
+  } else if(g.week>=3){
+    s+='<circle cx="192" cy="18" r="26" fill="#FFE45C" opacity=".5"/>';
+  }
+  if(g.streak>=3) s+='<path d="M96,26 q4,-5 8,0 q4,-5 8,0" fill="none" stroke="#2F3A2F" stroke-width="1.6" stroke-linecap="round"/>'
+    +'<path d="M122,34 q3,-4 6,0 q3,-4 6,0" fill="none" stroke="#2F3A2F" stroke-width="1.4" stroke-linecap="round"/>';
+  s+=mat();
+  /* équipements gagnés */
+  if(t>=10) s+=hibar(148,44,50);
+  if(t>=20) s+=bench(96,44,92);
+  /* arbre : 5 stades */
+  s+='<ellipse cx="60" cy="114" rx="26" ry="4.5" fill="#243B1F" opacity=".3"/>';
+  if(t<3){
+    s+='<path d="M60,112 L60,101" stroke="#2F5B33" stroke-width="2.5" stroke-linecap="round"/>'
+      +'<ellipse cx="55" cy="101" rx="5" ry="2.6" fill="#3E7A3C" transform="rotate(-25 55 101)"/>'
+      +'<ellipse cx="65" cy="99" rx="5" ry="2.6" fill="#3E7A3C" transform="rotate(25 65 99)"/>';
+  } else if(t<12){
+    s+='<rect x="57.5" y="94" width="5" height="18" rx="2" fill="#6B4A28"/>'
+      +'<circle cx="60" cy="86" r="13" fill="#2F6B36"/><circle cx="52" cy="92" r="8" fill="#3E7A3C"/><circle cx="68" cy="92" r="8" fill="#3E7A3C"/>';
+  } else if(t<30){
+    s+='<rect x="56.5" y="86" width="7" height="26" rx="3" fill="#6B4A28"/>'
+      +'<circle cx="60" cy="72" r="16" fill="#2F6B36"/><circle cx="47" cy="82" r="11" fill="#3E7A3C"/><circle cx="73" cy="82" r="11" fill="#3E7A3C"/><circle cx="60" cy="88" r="10" fill="#356F38"/>';
+  } else {
+    const big=t>=60;
+    s+='<rect x="55.5" y="80" width="9" height="32" rx="4" fill="#6B4A28"/>'
+      +'<circle cx="60" cy="62" r="'+(big?20:17)+'" fill="#2F6B36"/><circle cx="42" cy="74" r="13" fill="#3E7A3C"/><circle cx="78" cy="74" r="13" fill="#3E7A3C"/><circle cx="60" cy="82" r="12" fill="#356F38"/>';
+    const fr=big?[[50,60],[70,58],[60,50],[44,72],[76,70],[55,74],[68,78]]:[[52,62],[68,60],[60,74],[74,72]];
+    fr.forEach(p=>{ s+='<circle cx="'+p[0]+'" cy="'+p[1]+'" r="2.6" fill="#FFD400"/>'; });
+  }
+  /* fleurs : séances des 4 dernières semaines */
+  const xs=[92,104,116,128,140,168,180,192,30,40,86,158];
+  g.recent.slice(0,12).forEach((x,i)=>{
+    const fx=xs[i%xs.length], fy=108-(i%2)*3;
+    const col=x.type==='hirt'?'#F2685C':'#F6F3E8';
+    s+='<path d="M'+fx+','+(fy+6)+' L'+fx+','+fy+'" stroke="#2F5B33" stroke-width="1.6" stroke-linecap="round"/>';
+    [[0,-3.2],[3.2,0],[0,3.2],[-3.2,0]].forEach(o=>{ s+='<circle cx="'+(fx+o[0])+'" cy="'+(fy-3+o[1])+'" r="2.1" fill="'+col+'"/>'; });
+    s+='<circle cx="'+fx+'" cy="'+(fy-3)+'" r="1.7" fill="#FFD400"/>';
+  });
+  return s+'</svg>';
+}
+function gardenCaption(){
+  const g=gardenStats();
+  let c = g.total===0 ? 'Ton jardin attend sa première graine : lance une séance !'
+    : g.week===0 ? (g.recent.length? 'Le jardin patiente… une séance cette semaine le fera refleurir.' : 'Il pleut sur le jardin — une séance suffit à ramener le soleil.')
+    : g.week+' séance'+(g.week>1?'s':'')+' cette semaine — '+(g.week>=3?'le soleil brille fort ☀️':'le jardin fleurit 🌼');
+  const nm=MILESTONES.find(m=>m.at>g.total);
+  if(nm) c+=' Encore '+(nm.at-g.total)+' séance'+(nm.at-g.total>1?'s':'')+' avant que '+nm.label+' n\''+nm.v+'.';
+  if(g.streak>=3) c+=' '+g.streak+' semaines d\'affilée — les oiseaux sont revenus.';
+  return c;
 }
 
 /* ================= SUIVI ================= */
@@ -1118,9 +1364,12 @@ function renderSuivi(){
   const monday=new Date(now); monday.setHours(0,0,0,0); monday.setDate(now.getDate()-((now.getDay()+6)%7));
   const week=state.history.filter(x=>new Date(x.date)>=monday).length;
   const lvl=levelInfo();
-  let h='<div class="hero"><div class="eyebrow" style="color:#BFE39A">Suivi</div><h2>Niveau <span class="accent">'+lvl.name+'</span></h2>'
+  let h='<div class="hero" style="padding-bottom:14px"><div class="eyebrow" style="color:#BFE39A">Ton jardin · Niveau '+lvl.name+'</div>'
+    +'<h2>Chaque séance <span class="accent">fait pousser</span> ton jardin</h2>'
+    +'<div style="margin-top:10px;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.18)">'+gardenSVG()+'</div>'
+    +'<p style="margin-top:9px">'+gardenCaption()+'</p>'
     +'<div class="lvlbar"><i style="width:'+lvl.pct+'%"></i></div>'
-    +'<p>'+(lvl.next?(lvl.next.min-lvl.count)+' séance(s) avant le niveau « '+lvl.next.n+' »':'Niveau maximum atteint — respect. 🏔')+'</p></div>';
+    +'<p style="font-size:12px">'+(lvl.next?(lvl.next.min-lvl.count)+' séance(s) avant le niveau « '+lvl.next.n+' »':'Niveau maximum atteint — respect. 🏔')+'</p></div>';
   h+='<div class="grid2" style="margin-bottom:12px">'
     +'<div class="stat"><div class="v">'+week+'<span style="font-size:15px;color:var(--muted)"> / 3</span></div><div class="l">Cette semaine</div></div>'
     +'<div class="stat"><div class="v">'+state.history.length+'</div><div class="l">Séances au total</div></div></div>';
