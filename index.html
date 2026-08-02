@@ -403,7 +403,73 @@ jsquat(){ return mat()+shadow(105,42)
   + stroke('M92,88 L116,92 L112,112',9) + stroke('M112,112 L126,112',6)
   + stroke('M92,88 L104,90',12,SHORT)
   + stroke('M102,64 L122,66 L140,63',7)
-  + head(101,50) + arrUp(64,44,90) + arrUp(160,44,90); }
+  + head(101,50) + arrUp(64,44,90) + arrUp(160,44,90); },
+decl(){ return bench(24,50,84)+mat()+shadow(120,55)
+  + stroke('M140,92 L152,103 L146,113',7,FAR)
+  + stroke('M96,86 L72,85 L50,84',8,FAR)
+  + stroke('M144,90 C129,89 113,87 98,84',13)
+  + stroke('M98,84 L74,83 L52,82',9)
+  + stroke('M100,84 L86,84',12,SHORT)
+  + stroke('M142,91 L154,102 L148,112',7.5)
+  + head(160,84) + arrV(184,78,110); },
+diam(){ return mat()+shadow(104,62)
+  + stroke('M142,93 L152,105 L145,113',7,FAR)
+  + stroke('M106,99 L80,107 L54,113',8,FAR)
+  + stroke('M150,90 C136,93 122,96 108,97',13)
+  + stroke('M108,97 L82,104 L56,111',9) + stroke('M56,111 L48,113',6)
+  + stroke('M110,97 L94,101',12,SHORT)
+  + stroke('M148,91 L158,103 L150,112',7.5)
+  + '<path d="M147,106 l6,-5 l6,5 l-6,5 z" fill="#FFD400" opacity=".95"/>'
+  + head(164,84) + arrV(184,80,110); },
+crunch(){ return mat()+shadow(110,58)
+  + stroke('M86,95 L103,89 L113,91',6.5,FAR)
+  + stroke('M114,106 L136,88 L146,111',8,FAR)
+  + stroke('M84,93 C93,99 102,103 112,105',13)
+  + stroke('M112,105 L134,86 L144,110',9) + stroke('M144,110 L153,110',6)
+  + stroke('M112,105 L123,97',11,SHORT)
+  + stroke('M85,94 L102,88 L112,90',7)
+  + head(70,86) + arrUp(50,72,92); },
+twist(){ return mat()+shadow(112,50)
+  + stroke('M92,78 L110,84 L124,90',6.5,FAR)
+  + stroke('M106,103 L130,92 L150,84',8,FAR)
+  + stroke('M104,102 C99,93 95,83 92,74',13)
+  + stroke('M104,102 L128,90 L148,82',9)
+  + stroke('M104,102 L112,97',11,SHORT)
+  + stroke('M94,76 L112,82 L126,88',7)
+  + head(90,62) + arrH(58,152,44); },
+chaise(){ return mat()+shadow(122,40)
+  + '<rect x="152" y="26" width="8" height="86" rx="2" fill="#9AA1A9"/><rect x="160" y="26" width="3" height="86" fill="#7C838B"/>'
+  + stroke('M138,60 L128,75 L131,85',7,FAR)
+  + stroke('M138,87 L110,90 L112,112',8,FAR)
+  + stroke('M140,58 L140,86',13)
+  + stroke('M140,86 L112,88 L114,112',9) + stroke('M114,112 L127,112',6)
+  + stroke('M140,86 L128,87',12,SHORT)
+  + stroke('M140,60 L130,74 L133,84',7.5)
+  + head(140,46) + hold(38,38); },
+sumo(){ return mat()+shadow(110,48)
+  + stroke('M110,52 L102,68 L108,78',7,FAR)
+  + stroke('M110,76 L88,90 L86,112',9) + stroke('M86,112 L77,112',6)
+  + stroke('M110,76 L132,90 L134,112',9) + stroke('M134,112 L143,112',6)
+  + stroke('M110,50 L110,76',13)
+  + stroke('M110,76 L98,84',11,SHORT) + stroke('M110,76 L122,84',11,SHORT)
+  + stroke('M110,52 L118,68 L112,78',7.5)
+  + head(110,38) + arrV(56,56,100); },
+skater(){ return mat()+shadow(114,46)
+  + stroke('M101,54 L117,60 L129,52',6.5,FAR)
+  + stroke('M108,80 L88,96 L74,90',8,FAR)
+  + stroke('M98,52 C102,62 105,71 108,80',13)
+  + stroke('M108,80 L122,96 L119,112',9) + stroke('M119,112 L131,112',6)
+  + stroke('M108,80 L99,88',12,SHORT)
+  + stroke('M99,54 L83,62 L72,56',7.5)
+  + head(94,40) + arrH(52,160,128); },
+talons(){ return mat()+shadow(102,36)
+  + stroke('M106,44 L92,55 L84,62',6.5,FAR)
+  + stroke('M105,68 L100,90 L103,112',8,FAR)
+  + stroke('M108,42 C107,51 106,60 105,68',13)
+  + stroke('M105,68 L122,84 L110,78',9)
+  + stroke('M105,68 L114,71',12,SHORT)
+  + stroke('M108,44 L122,55 L135,47',7.5)
+  + head(108,28) + arrUp(158,54,86); }
 };
 let _fid=0;
 function figSVG(k, w){
@@ -489,7 +555,39 @@ knees:{n:'Montées de genoux', ms:'Cardio · fléchisseurs de hanche', cat:'Card
 jsquat:{n:'Squats sautés', ms:'Quadriceps · fessiers · explosivité', cat:'Cardio / full body',
  steps:['Descends en squat complet, cuisses parallèles.','Explose vers le haut en poussant fort dans les talons.','Saute, corps tendu, bras vers l\'arrière puis l\'avant pour l\'élan.','Amortis la réception genoux fléchis et enchaîne directement le squat suivant.'],
  err:['Réception jambes tendues (dur pour les genoux).','Demi-amplitude en bas.','Genoux qui rentrent à la réception.'],
- chain:['Squats','Squats sautés','Jump squats 180°','Box jumps']}
+ chain:['Squats','Squats sautés','Jump squats 180°','Box jumps']},
+decl:{n:'Pompes déclinées', ms:'Haut des pectoraux · épaules', cat:'Poussée horizontale',
+ steps:['Pieds surélevés sur un banc ou une chaise, mains au sol sous les épaules.','Corps parfaitement gainé, ne laisse pas les hanches plonger.','Descends la poitrine vers le sol en 2 secondes, coudes à 45°.','Pousse fort pour remonter. Plus les pieds sont hauts, plus c\'est dur.'],
+ err:['Hanches qui cassent vers le bas.','Tête qui plonge en avant.','Amplitude raccourcie.'],
+ chain:['Pompes','Pompes déclinées','Pompes déclinées lestées','Handstand push-up au mur']},
+diam:{n:'Pompes diamant', ms:'Triceps · intérieur des pectoraux', cat:'Poussée horizontale',
+ steps:['Position pompe, mains jointes sous la poitrine : pouces et index forment un losange.','Coudes serrés le long du corps, corps gainé.','Descends la poitrine vers les mains en contrôle.','Pousse en verrouillant les triceps en haut.'],
+ err:['Coudes qui s\'écartent.','Mains trop hautes (sous le visage).','Hanches qui tombent.'],
+ chain:['Pompes','Pompes serrées','Pompes diamant','Diamant déclinées']},
+crunch:{n:'Crunchs', ms:'Abdominaux (grand droit)', cat:'Gainage',
+ steps:['Allongé sur le dos, genoux fléchis, pieds au sol.','Mains tendues vers les genoux ou aux tempes (jamais derrière la nuque).','Décolle les épaules en enroulant le buste, le bas du dos reste collé au sol.','Expire en montant, redescends en contrôle sans reposer complètement la tête.'],
+ err:['Tirer sur la nuque avec les mains.','Monter tout le buste (c\'est un enroulement, pas un sit-up).','Mouvement en élan.'],
+ chain:['Crunchs','Crunchs pieds décollés','Crunchs jambes 90°','Hollow rocks']},
+twist:{n:'Russian twists', ms:'Obliques · rotation du buste', cat:'Gainage',
+ steps:['Assis, buste incliné en arrière à ~45°, genoux fléchis.','Mains jointes devant toi, dos droit (pas arrondi).','Tourne les ÉPAULES d\'un côté puis de l\'autre — les mains suivent, pas l\'inverse.','Plus dur : pieds décollés du sol.'],
+ err:['Bouger seulement les bras sans tourner le buste.','Dos qui s\'arrondit.','Aller trop vite en perdant l\'amplitude.'],
+ chain:['Twists pieds au sol','Russian twists','Pieds décollés','Avec charge (bouteille)']},
+chaise:{n:'Chaise au mur', ms:'Quadriceps (isométrique)', cat:'Squat',
+ steps:['Dos entièrement plaqué contre un mur, pieds avancés.','Glisse jusqu\'à ce que les cuisses soient parallèles au sol, genoux à 90°.','Genoux au-dessus des chevilles, mains sur les cuisses interdites (le long du mur ou devant).','Respire calmement et tiens. Ça brûle : c\'est normal, c\'est le but.'],
+ err:['Cuisses pas assez basses.','Pousser sur les cuisses avec les mains.','Talons qui décollent.'],
+ chain:['Chaise haute (45°)','Chaise au mur','Chaise + 60 s','Chaise une jambe']},
+sumo:{n:'Squats sumo', ms:'Fessiers · intérieur des cuisses', cat:'Squat',
+ steps:['Pieds bien plus larges que les épaules, pointes ouvertes à 45°.','Descends verticalement, genoux qui suivent la direction des pointes.','Cuisses parallèles au sol, buste droit, mains jointes devant.','Remonte en serrant les fessiers, pousse les genoux vers l\'extérieur.'],
+ err:['Genoux qui rentrent vers l\'intérieur.','Buste qui penche en avant.','Pas assez de largeur (c\'est un sumo, écarte !).'],
+ chain:['Squats','Squats sumo','Sumo tempo lent','Sumo sautés']},
+skater:{n:'Patineur', ms:'Fessiers · cardio · équilibre', cat:'Cardio / full body',
+ steps:['Saute latéralement d\'une jambe sur l\'autre, comme un patineur de vitesse.','Atterris sur une jambe, l\'autre croisée derrière sans toucher le sol.','Les bras balancent naturellement pour l\'équilibre.','Amortis chaque réception genou fléchi, enchaîne en rythme.'],
+ err:['Sauts trop courts (allonge-toi latéralement !).','Réception jambe raide.','Poser le pied arrière.'],
+ chain:['Pas chassés','Patineur pied posé','Patineur','Patineur + toucher du sol']},
+talons:{n:'Talons-fesses', ms:'Cardio · ischio-jambiers', cat:'Cardio / full body',
+ steps:['Cours sur place en ramenant les talons jusqu\'aux fesses.','Buste droit, regard devant, gainé.','Les bras accompagnent en rythme de course.','Contact au sol bref, sur l\'avant du pied.'],
+ err:['Se pencher en avant.','Talons qui ne montent qu\'à moitié.','Rythme irrégulier.'],
+ chain:['Marche talons-fesses','Talons-fesses','Version sprint','Alterné avec montées de genoux']}
 };
 
 /* ================= OBJECTIFS & PROGRAMMES ================= */
@@ -497,7 +595,8 @@ const OBJ = {
  physique:{t:'Physique & esthétique', d:'Construire du muscle visible : volume modéré, 8-15 reps, tout le corps.', rest:90},
  force:{t:'Force & skills', d:'Vers la traction, les dips complets, le handstand : séries courtes, variantes dures.', rest:120},
  hirt:{t:'Complément HIRT & course', d:'Renforcement qui soutient tes autres entraînements sans les parasiter.', rest:75},
- sante:{t:'Mobilité & santé', d:'Bouger mieux, sans douleur : tempo lent, amplitudes, gainage postural.', rest:60}
+ sante:{t:'Mobilité & santé', d:'Bouger mieux, sans douleur : tempo lent, amplitudes, gainage postural.', rest:60},
+ brule:{t:'Brûleur de graisse', d:'Dépense maximale : circuits denses, gros groupes musculaires, repos courts. Rappel de coach : la perte de gras se joue d\'abord dans l\'assiette (léger déficit calorique + protéines) — ces séances maximisent la dépense et préservent le muscle.', rest:60}
 };
 const PROGS = {
 physique:{name:'Programme Physique', sessions:[
@@ -527,7 +626,14 @@ sante:{name:'Programme Mobilité & Santé', sessions:[
  {id:'B', title:'Séance B · Haut du corps', hint:'Amplitude avant tout', items:[
   {ex:'pompe_inc',sets:3,reps:'8-12'},{ex:'row',sets:3,reps:'8-10'},{ex:'dips',sets:2,reps:'8-10'},{ex:'planche',sets:3,reps:'20-30s'}]},
  {id:'C', title:'Séance C · Gainage & posture', hint:'Respiration calme', items:[
-  {ex:'planche',sets:3,reps:'20-30s'},{ex:'side',sets:3,reps:'15-20s/c'},{ex:'hollow',sets:3,reps:'15-20s'},{ex:'bridge',sets:3,reps:'12'}]}]}
+  {ex:'planche',sets:3,reps:'20-30s'},{ex:'side',sets:3,reps:'15-20s/c'},{ex:'hollow',sets:3,reps:'15-20s'},{ex:'bridge',sets:3,reps:'12'}]}]},
+brule:{name:'Programme Brûleur de Graisse', sessions:[
+ {id:'A', title:'Séance A · Full body dépense', hint:'Repos courts !', items:[
+  {ex:'jsquat',sets:4,reps:'10-15'},{ex:'pompe',sets:3,reps:'10-15'},{ex:'climber',sets:3,reps:'40s'},{ex:'fente',sets:3,reps:'10/jambe'},{ex:'planche',sets:3,reps:'30-45s'}]},
+ {id:'B', title:'Séance B · Cardio renfo', hint:'Ça doit chauffer', items:[
+  {ex:'burpee',sets:4,reps:'8-12'},{ex:'sumo',sets:3,reps:'15-20'},{ex:'skater',sets:3,reps:'30s'},{ex:'twist',sets:3,reps:'20'},{ex:'hollow',sets:3,reps:'20-30s'}]},
+ {id:'C', title:'Séance C · Circuit complet', hint:'Finis fort', items:[
+  {ex:'talons',sets:3,reps:'30s'},{ex:'pompe_inc',sets:3,reps:'12-15'},{ex:'chaise',sets:3,reps:'30-45s'},{ex:'row',sets:3,reps:'8-12'},{ex:'crunch',sets:3,reps:'15-20'}]}]}
 };
 
 /* ================= HIRT ================= */
@@ -543,7 +649,10 @@ const HPRESETS = [
   note:'Maximum de tours en 15 minutes. Compte-les avec le bouton +1.'},
  {name:'Tabata Finisher', fmt:'tabata', work:20, rest:10, rounds:8,
   exs:['burpee','knees'],
-  note:'8 intervalles de 20/10 en alternant les 2 exercices — 4 minutes qui piquent, en fin de séance.'}
+  note:'8 intervalles de 20/10 en alternant les 2 exercices — 4 minutes qui piquent, en fin de séance.'},
+ {name:'Brûleur 30/15', fmt:'circuit', work:30, rest:15, rounds:5,
+  exs:['burpee','jsquat','climber','skater','talons','pompe'],
+  note:'Le circuit métabolique : 6 exercices full body, 5 tours, repos minimum. Dépense maximale en ~23 min.'}
 ];
 function exKey(x){ return typeof x==='string' ? x : x.ex; }
 function exName(x){ const e=EX[exKey(x)]; return e ? e.n : '?'; }
@@ -610,7 +719,15 @@ const CUES={pompe:'Corps gainé, coudes à quarante-cinq degrés.',
  burpee:'Amortis toujours genoux fléchis.',
  jack:'Réception souple sur l\'avant du pied.',
  knees:'Genoux à hauteur de hanche, buste droit.',
- jsquat:'Explose en montant, amortis en douceur.'};
+ jsquat:'Explose en montant, amortis en douceur.',
+ decl:'Corps gainé, la poitrine descend vers le sol.',
+ diam:'Mains en losange, coudes serrés au corps.',
+ crunch:'Décolle les épaules, le bas du dos reste au sol.',
+ twist:'Tourne les épaules, pas juste les bras.',
+ chaise:'Dos plaqué au mur, cuisses parallèles. Tiens bon.',
+ sumo:'Pieds larges, genoux vers l\'extérieur.',
+ skater:'Saute loin, amortis sur une jambe.',
+ talons:'Les talons touchent les fesses, buste droit.'};
 function frVoice(){ try{ return speechSynthesis.getVoices().find(v=>v.lang&&v.lang.toLowerCase().startsWith('fr')); }catch(e){ return null; } }
 function speak(t,prio){
   if(!state.voice) return;
@@ -673,6 +790,11 @@ const COURSE = [
  {t:'Échauffement et mobilité', b:'<p>5 minutes avant chaque séance : 1 min de cardio léger, cercles de bras / épaules / poignets, puis 10 squats lents et 10 pompes inclinées pour répéter les patterns. Poignets et épaules sont les zones sensibles du débutant : échauffe-les à chaque fois. L\'appli embarque un échauffement guidé chronométré (bouton 🔥 dans Programme et HIRT).</p>'},
  {t:'Décharge et retour au calme', b:'<p>Toutes les 6 à 8 semaines, offre-toi une <b>semaine de décharge</b> : mêmes séances, mais moitié moins de séries (ou difficulté 🌱 Découverte). Les articulations et le système nerveux récupèrent, et tu repars plus fort — c\'est ce que font tous les athlètes sérieux.</p><p>Après chaque séance, 2-3 minutes de <b>retour au calme</b> : marche tranquille, respiration nasale lente, puis étirements doux des muscles travaillés (20-30 s par position, sans forcer). Ton ressenti de fin de séance (🥱💪😮‍💨) aide l\'appli à te conseiller.</p>'}
 ];
+const NUTRI = [
+ {t:'Le déficit calorique', b:'<p>Ton corps dépense de l\'énergie chaque jour (métabolisme + activité) : c\'est ta <b>maintenance</b>. Manger en dessous, c\'est obliger ton corps à puiser dans ses réserves — dont le gras. C\'est LE mécanisme de la perte de gras : aucun aliment ne « brûle » quoi que ce soit, et aucune séance ne compense une assiette qui déborde toute la semaine.</p><p>• <b>Estime ta maintenance</b> : poids (kg) × 31 à 35 selon ton activité — ou observe 2 semaines à poids stable.<br>• <b>Déficit modéré</b> : retire 300 à 500 kcal/jour, soit ~0,3 à 0,5 kg par semaine. Pas plus : un régime crash coûte du muscle, de l\'énergie… et finit en rebond.<br>• <b>Protéines élevées</b> (1,6-2 g/kg/jour) + tes séances renfo = le gras part, le muscle reste.<br>• <b>Juge sur la tendance</b> : pèse-toi le matin, compare des moyennes hebdomadaires, ajuste par petites touches.</p><p>Ceci est de l\'information générale, pas un suivi médical : pour un objectif important ou un doute, médecin ou diététicien restent le bon réflexe.</p>'},
+ {t:'Jours riches, modérés, pauvres', b:'<p>Le cyclage des glucides — popularisé en France notamment par Papa in Shape — cale ton énergie sur ta dépense : les glucides sont un carburant, on en met beaucoup quand le moteur tourne fort, moins quand il est au garage.</p><p>• <b>Jour RICHE 🍚</b> — grosse séance (jambes, HIRT Brûleur) : portion de glucides doublée (riz, pommes de terre, avoine), lipides allégés. Énergie et récupération au rendez-vous.<br>• <b>Jour MODÉRÉ 🍽</b> — séance classique ou course : assiette équilibrée standard.<br>• <b>Jour PAUVRE 🥦</b> — repos : glucides réduits (pas supprimés !) : légumes à volonté, protéines, lipides un peu plus présents.</p><p>Deux règles d\'or : les <b>protéines restent constantes</b> tous les jours, et c\'est le <b>total de la semaine</b> qui fait le déficit — le cyclage ne change pas la physique, il rend le déficit plus vivable et met l\'énergie au bon moment.</p><p>Sur ta semaine type (3 renfo + course) : riche les jours de grosse séance, modéré les jours d\'entraînement léger et de course, pauvre les jours off.</p>'},
+ {t:'Les familles d\'aliments', b:'<p><b>🥩 Protéines — les briques.</b> Construisent le muscle et calent la faim. À chaque repas, ~1 paume : œufs, poulet, dinde, bœuf maigre (5 %), poisson blanc, saumon, thon, fromage blanc, skyr, tofu, légumineuses. Objectif : 1,6 à 2 g par kilo de poids et par jour.</p><p><b>🍚 Glucides — le carburant.</b> C\'est la variable des jours riches/pauvres. Privilégie les lents : riz, pâtes complètes, patate douce, pommes de terre, flocons d\'avoine, pain complet, lentilles. Les rapides (fruits, miel) autour des séances. Repère : ½ à 2 poings selon le jour.</p><p><b>🥑 Lipides — la mécanique hormonale.</b> À ne jamais descendre trop bas : huile d\'olive et colza, avocat, amandes et noix, poissons gras, jaune d\'œuf. Repère : ~1 pouce par repas. À limiter : fritures et produits ultra-transformés.</p><p><b>🥦 Légumes & fibres — le volume malin.</b> Micronutriments, satiété, digestion : la moitié de l\'assiette, quasi à volonté. Les fruits : 2 à 3 par jour.</p><p><b>💧 Et autour :</b> eau 1,5 à 2,5 L par jour (plus les jours de séance), café et thé sans excès. L\'alcool : des calories sans satiété — le premier poste d\'économie. Règle 80/20 : 80 % d\'aliments bruts, 20 % de plaisir, zéro interdit.</p>'}
+];
 
 /* ================= ÉTAT & STOCKAGE ================= */
 let state = null; let mem=false;
@@ -699,14 +821,14 @@ function toast(msg){ const t=document.getElementById('toast'); t.textContent=msg
 /* ================= NIVEAUX & BADGES ================= */
 const LEVELS=[{n:'Fondations',min:0},{n:'Construction',min:12},{n:'Performance',min:30},{n:'Maîtrise',min:60}];
 function levelInfo(){
-  const c=state.history.length;
+  const c=state.history.filter(x=>x.type!=='run').length;
   let i=0; LEVELS.forEach((l,k)=>{ if(c>=l.min) i=k; });
   const next=LEVELS[i+1];
   return {name:LEVELS[i].n, idx:i, count:c, next:next, pct: next?Math.round((c-LEVELS[i].min)/(next.min-LEVELS[i].min)*100):100};
 }
 function weekKey(d){ const x=new Date(d); x.setHours(0,0,0,0); x.setDate(x.getDate()-((x.getDay()+6)%7)); return x.toISOString().slice(0,10); }
 function badges(){
-  const h=state.history, weeks={};
+  const h=state.history.filter(x=>x.type!=='run'), weeks={};
   h.forEach(x=>{ const k=weekKey(x.date); weeks[k]=(weeks[k]||0)+1; });
   const wkeys=Object.keys(weeks).sort();
   let streak=0,best=0;
@@ -758,7 +880,8 @@ function nextSession(){
 /* ================= GÉNÉRATEUR DE SÉANCE DU JOUR ================= */
 const DEFREPS={pompe:'8-12',pompe_inc:'12-15',pike:'6-10',dips:'10-15',squat:'15-20',fente:'10/jambe',
  bulg:'8-12/j',bridge:'15-20',planche:'30-45s',side:'20-30s/c',hollow:'20-30s',superman:'12-15',
- row:'8-12',negpull:'4-6',climber:'30s',burpee:'8-12',jack:'30s',knees:'30s',jsquat:'10-15'};
+ row:'8-12',negpull:'4-6',climber:'30s',burpee:'8-12',jack:'30s',knees:'30s',jsquat:'10-15',
+ decl:'6-10',diam:'6-10',crunch:'15-20',twist:'20',chaise:'30-45s',sumo:'15-20',skater:'30s',talons:'30s'};
 const FAMNAME={push:'Poussée',pull:'Tirage',legs:'Jambes',core:'Gainage',cardio:'Cardio'};
 function famOf(k){ const c=EX[k].cat;
   if(c.indexOf('Poussée')===0) return 'push';
@@ -769,6 +892,13 @@ function famOf(k){ const c=EX[k].cat;
 function famHistory(){
   const now=Date.now(), last={}, cnt={push:0,pull:0,legs:0,core:0,cardio:0};
   state.history.forEach(x=>{
+    if(x.type==='run'){
+      const hrs=(now-new Date(x.date).getTime())/3600000;
+      ['legs','cardio'].forEach(f=>{
+        if(last[f]===undefined||hrs<last[f]) last[f]=hrs;
+        if(hrs<=168) cnt[f]++; });
+      return;
+    }
     let keys=x.exs;
     if(!keys && x.sess){ const s=state.prog.sessions.find(z=>z.id===x.sess); if(s) keys=s.items.map(i=>i.ex); }
     if(!keys) return;
@@ -811,7 +941,9 @@ function genSession(mins, ranToday){
           items:picked.map(k=>({ex:k, sets:sets, reps:DEFREPS[k]||'10-12'}))};
 }
 let genOpts={mins:30, ran:false}, genPrev=null;
-function openGen(){ genPrev=null; renderGen(); }
+function openGen(){ genPrev=null;
+  genOpts.ran = state.history.some(x=>x.type==='run' && dkey(new Date(x.date))===dkey(new Date()));
+  renderGen(); }
 function setGenMins(m){ genOpts.mins=m; genPrev=null; renderGen(); }
 function toggleGenRan(){ genOpts.ran=!genOpts.ran; genPrev=null; renderGen(); }
 function doGen(){ genPrev=genSession(genOpts.mins, genOpts.ran); renderGen(); }
@@ -842,6 +974,37 @@ function renderGen(){
   document.getElementById('modal').classList.add('on');
 }
 
+/* ================= JOURNAL DE COURSE ================= */
+let runlog={mins:30,km:'',when:0};
+function openRunLog(){ runlog={mins:30,km:'',when:0}; renderRunLog(); }
+function rlSet(f,v){ runlog[f] = (f==='km') ? v : Math.max(1,parseInt(v)||runlog[f]); }
+function rlWhen(w){ runlog.when=w; renderRunLog(); }
+function renderRunLog(){
+  let h='<div class="handle"></div><h2>🏃 Ajouter une course</h2>'
+   +'<p class="muted" style="margin-bottom:12px">Elle fleurit dans ton jardin, compte dans ta régularité, et le générateur de séance préservera tes jambes le jour même.</p>'
+   +'<div class="hnum" style="grid-template-columns:1fr 1fr">'
+   +'<div class="hfield"><label>Durée (min)</label><input type="number" inputmode="numeric" value="'+runlog.mins+'" onchange="rlSet(\'mins\',this.value)"></div>'
+   +'<div class="hfield"><label>Distance (km, optionnel)</label><input type="number" inputmode="decimal" step="0.1" value="'+runlog.km+'" onchange="rlSet(\'km\',this.value)"></div></div>'
+   +'<div class="hfield"><label>Quand ?</label><div class="row">'
+   +'<button class="btn '+(runlog.when===0?'sun':'dim')+' sm grow" onclick="rlWhen(0)">Aujourd\'hui</button>'
+   +'<button class="btn '+(runlog.when===1?'sun':'dim')+' sm grow" onclick="rlWhen(1)">Hier</button></div></div>'
+   +'<div class="row" style="margin-top:12px"><button class="btn sun grow" onclick="saveRunLog()">Enregistrer la course</button>'
+   +'<button class="btn dim" onclick="closeModal()">Fermer</button></div>';
+  document.getElementById('sheet').innerHTML=h;
+  document.getElementById('modal').classList.add('on');
+}
+function saveRunLog(){
+  const d=new Date(); if(runlog.when===1) d.setDate(d.getDate()-1);
+  const e={date:d.toISOString(), type:'run', name:'Course à pied', mins:runlog.mins};
+  const km=parseFloat(String(runlog.km).replace(',','.'));
+  if(km>0) e.km=km;
+  state.history.unshift(e);
+  state.history.sort((a,b)=>new Date(b.date)-new Date(a.date));
+  save(); closeModal();
+  if(tab==='suivi') renderSuivi();
+  toast('Course ajoutée 🏃 Le générateur en tiendra compte');
+}
+
 /* ================= NAVIGATION ================= */
 let tab='prog', editing=false, run=null, timerH=null;
 document.querySelectorAll('.tabbar button').forEach(b=>b.addEventListener('click',()=>{
@@ -869,8 +1032,13 @@ function renderCours(){
     + '<h2>La callisthénie,<br>c\'est <span class="accent">ton corps</span><br>comme seule machine</h2>'
     + '<p>Force, muscle et contrôle avec le poids du corps. 8 principes à connaître — tape sur chaque carte.</p>'
     + '<div style="margin-top:12px;border-radius:14px;overflow:hidden;border:1px solid rgba(255,255,255,.18)">'+figSVG('pompe',600)+'</div></div>';
+  h += '<div class="eyebrow" style="margin:2px 2px 8px">Entraînement</div>';
   COURSE.forEach((c,i)=>{
     h += '<details class="pcard"><summary><span class="num">'+String(i+1).padStart(2,'0')+'</span><h3>'+c.t+'</h3></summary><div class="body">'+c.b+'</div></details>';
+  });
+  h += '<div class="eyebrow" style="margin:14px 2px 8px">Nutrition</div>';
+  NUTRI.forEach((c,i)=>{
+    h += '<details class="pcard"><summary><span class="num">'+String(COURSE.length+i+1).padStart(2,'0')+'</span><h3>'+c.t+'</h3></summary><div class="body">'+c.b+'</div></details>';
   });
   M.innerHTML='<div class="fx">'+h+'</div>';
 }
@@ -1313,7 +1481,7 @@ function gardenStats(){
   streak=0; let cur=new Date(monday);
   if(!weeks[weekKey(cur)]) cur.setDate(cur.getDate()-7);
   while(weeks[weekKey(cur)]){ streak++; cur.setDate(cur.getDate()-7); }
-  return {total:state.history.length, week:week, lastWeek:lastWeek, recent:recent, streak:streak};
+  return {total:state.history.filter(x=>x.type!=='run').length, week:week, lastWeek:lastWeek, recent:recent, streak:streak};
 }
 function gardenSVG(){
   const g=gardenStats(), t=g.total; _fid++;
@@ -1354,7 +1522,7 @@ function gardenSVG(){
   const xs=[92,104,116,128,140,168,180,192,30,40,86,158];
   g.recent.slice(0,12).forEach((x,i)=>{
     const fx=xs[i%xs.length], fy=108-(i%2)*3;
-    const col=x.type==='hirt'?'#F2685C':'#F6F3E8';
+    const col=x.type==='hirt'?'#F2685C':(x.type==='run'?'#7FC8F0':'#F6F3E8');
     s+='<path d="M'+fx+','+(fy+6)+' L'+fx+','+fy+'" stroke="#2F5B33" stroke-width="1.6" stroke-linecap="round"/>';
     [[0,-3.2],[3.2,0],[0,3.2],[-3.2,0]].forEach(o=>{ s+='<circle cx="'+(fx+o[0])+'" cy="'+(fy-3+o[1])+'" r="2.1" fill="'+col+'"/>'; });
     s+='<circle cx="'+fx+'" cy="'+(fy-3)+'" r="1.7" fill="#FFD400"/>';
@@ -1376,7 +1544,8 @@ function gardenCaption(){
 function renderSuivi(){
   const now=new Date();
   const monday=new Date(now); monday.setHours(0,0,0,0); monday.setDate(now.getDate()-((now.getDay()+6)%7));
-  const week=state.history.filter(x=>new Date(x.date)>=monday).length;
+  const week=state.history.filter(x=>x.type!=='run'&&new Date(x.date)>=monday).length;
+  const runsWeek=state.history.filter(x=>x.type==='run'&&new Date(x.date)>=monday).length;
   const lvl=levelInfo();
   let h='<div class="hero" style="padding-bottom:14px"><div class="eyebrow" style="color:#BFE39A">Ton jardin · Niveau '+lvl.name+'</div>'
     +'<h2>Chaque séance <span class="accent">fait pousser</span> ton jardin</h2>'
@@ -1386,17 +1555,21 @@ function renderSuivi(){
     +'<p style="font-size:12px">'+(lvl.next?(lvl.next.min-lvl.count)+' séance(s) avant le niveau « '+lvl.next.n+' »':'Niveau maximum atteint — respect. 🏔')+'</p></div>';
   h+='<div class="grid2" style="margin-bottom:12px">'
     +'<div class="stat"><div class="v">'+week+'<span style="font-size:15px;color:var(--muted)"> / 3</span></div><div class="l">Cette semaine</div></div>'
-    +'<div class="stat"><div class="v">'+state.history.length+'</div><div class="l">Séances au total</div></div></div>';
+    +'<div class="stat"><div class="v">'+state.history.filter(x=>x.type!=='run').length+'</div><div class="l">Séances au total</div></div></div>';
+  if(runsWeek) h+='<p class="muted" style="margin:-4px 2px 12px;font-size:12px">🏃 + '+runsWeek+' course'+(runsWeek>1?'s':'')+' cette semaine</p>';
   h+='<div class="card"><h3>4 dernières semaines</h3>'+heatmap()+'<p class="muted" style="font-size:11px;margin-top:8px">Chaque case = un jour. Jaune = séance faite, jaune clair = double séance.</p></div>';
   h+='<div class="card"><h3>Badges</h3><div class="bgrid" style="margin-top:8px">';
   badges().forEach(b=>{ h+='<div class="badge '+(b.ok?'won':'')+'"><div class="e">'+b.e+'</div><div class="n">'+b.n+'</div></div>'; });
   h+='</div></div>';
+  h+='<button class="btn ghost wide" style="margin-bottom:12px" onclick="openRunLog()">🏃 Ajouter une course à pied</button>';
   h+='<div class="card"><h3>Historique</h3>';
   if(!state.history.length){ h+='<p class="muted">Aucune séance pour l\'instant. Lance ta première depuis l\'onglet Programme — t\'es partant ? 😉</p>'; }
   state.history.slice(0,30).forEach(x=>{
     const d=new Date(x.date);
     const lbl = x.type==='hirt'
       ? '<b>⚡ '+x.name+'</b>'+(typeof x.tours==='number'?' · '+x.tours+' tour(s)':'')
+      : x.type==='run'
+      ? '<b>🏃 Course à pied</b>'+(x.km?' · '+x.km+' km':'')
       : '<b>Séance '+x.sess+'</b> · '+x.sets+'/'+x.total+' séries';
     const rp = x.rpe&&RPE[x.rpe] ? ' '+RPE[x.rpe].e : '';
     h+='<div class="hline"><div>'+lbl+rp+'<div class="d">'+d.toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'})+' · '+x.mins+' min</div></div><span class="badge-sun">✓</span></div>';
